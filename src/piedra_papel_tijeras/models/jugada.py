@@ -12,12 +12,12 @@ class Jugada(ABC):
 
     @property
     @abstractmethod
-    def nombre(self) -> TipoJugada:
+    def nombre(self) -> str:
         """Devuelve el nombre de la jugada."""
 
     @property
     @abstractmethod
-    def vence_a_tipo(self) -> TipoJugada:
+    def _vence_a_tipo(self) -> TipoJugada:
         """devuelve el tipo de jugada al que vence"""
 
     def vence_a(self, otra: Jugada) -> bool:
@@ -26,7 +26,7 @@ class Jugada(ABC):
         if not isinstance(otra, Jugada):
             raise TypeError("Otra debe ser una instancia de Jugada")
 
-        return otra.tipo is self.vence_a_tipo
+        return otra.tipo is self._vence_a_tipo
 
     def __str__(self) -> str:
         """Devuelve la representación textual de la jugada."""
