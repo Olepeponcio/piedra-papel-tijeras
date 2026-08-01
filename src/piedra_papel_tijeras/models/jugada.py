@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from abc import ABC, abstractmethod
 
 
@@ -21,14 +23,14 @@ class Jugada(ABC):
     @abstractmethod
     def __str__(self) -> str:
         """devuelve un f str con los datos name y type del objeto"""
+
         return f"Name: {self.name}. Type: {type(self)}"
 
     @abstractmethod
-    def vence_a(otra: Jugada) -> bool:
+    def vence_a(self, otra: Jugada) -> bool:
         """Devuelve true si el objeto Jugada vence a otra
         args:
           otra: Jugada
 
         return:
           bool"""
-        pass
