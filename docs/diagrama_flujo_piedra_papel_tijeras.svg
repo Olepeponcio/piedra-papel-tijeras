@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1100" viewBox="0 0 900 1100" role="img" aria-labelledby="title desc">
+  <title id="title">Diagrama de flujo de piedra, papel y tijeras</title>
+  <desc id="desc">Flujo desde la elección del jugador hasta el resultado y la opción de volver a jugar.</desc>
+  <defs>
+    <style>
+      text { font-family: Arial, sans-serif; font-size: 18px; fill: #172033; text-anchor: middle; }
+      .node { fill: #f7f9fc; stroke: #385170; stroke-width: 2; }
+      .decision { fill: #fff4d6; stroke: #b7791f; stroke-width: 2; }
+      .result { fill: #e6f6ee; stroke: #27845b; stroke-width: 2; }
+      .line { fill: none; stroke: #385170; stroke-width: 2; marker-end: url(#arrow); }
+      .label { font-size: 15px; font-weight: bold; fill: #385170; }
+    </style>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#385170"/>
+    </marker>
+  </defs>
+
+  <ellipse class="node" cx="450" cy="45" rx="90" ry="30"/>
+  <text x="450" y="52">Inicio</text>
+
+  <rect class="node" x="285" y="105" width="330" height="70" rx="10"/>
+  <text x="450" y="133"><tspan x="450">El jugador elige:</tspan><tspan x="450" dy="24">piedra, papel o tijeras</tspan></text>
+
+  <rect class="node" x="285" y="220" width="330" height="60" rx="10"/>
+  <text x="450" y="257">La máquina elige al azar</text>
+
+  <polygon class="decision" points="450,325 600,390 450,455 300,390"/>
+  <text x="450" y="385"><tspan x="450">¿Las elecciones</tspan><tspan x="450" dy="24">son iguales?</tspan></text>
+
+  <rect class="result" x="80" y="500" width="210" height="60" rx="10"/>
+  <text x="185" y="537">Empate</text>
+
+  <polygon class="decision" points="555,500 700,565 555,630 410,565"/>
+  <text x="555" y="560"><tspan x="555">¿Gana el</tspan><tspan x="555" dy="24">jugador?</tspan></text>
+
+  <rect class="result" x="315" y="690" width="230" height="60" rx="10"/>
+  <text x="430" y="727">Victoria del jugador</text>
+
+  <rect class="result" x="610" y="690" width="230" height="60" rx="10"/>
+  <text x="725" y="727">Victoria de la máquina</text>
+
+  <polygon class="decision" points="450,805 600,870 450,935 300,870"/>
+  <text x="450" y="877">¿Jugar otra vez?</text>
+
+  <ellipse class="node" cx="450" cy="1040" rx="90" ry="30"/>
+  <text x="450" y="1047">Fin</text>
+
+  <path class="line" d="M450 75 V105"/>
+  <path class="line" d="M450 175 V220"/>
+  <path class="line" d="M450 280 V325"/>
+  <path class="line" d="M300 390 H185 V500"/>
+  <text class="label" x="240" y="380">Sí</text>
+  <path class="line" d="M600 390 H700 V500"/>
+  <text class="label" x="650" y="380">No</text>
+  <path class="line" d="M500 615 L455 690"/>
+  <text class="label" x="465" y="650">Sí</text>
+  <path class="line" d="M620 610 L700 690"/>
+  <text class="label" x="665" y="650">No</text>
+  <path class="line" d="M185 560 V870 H300"/>
+  <path class="line" d="M430 750 V805"/>
+  <path class="line" d="M725 750 V870 H600"/>
+  <path class="line" d="M450 935 V1010"/>
+  <text class="label" x="470" y="975">No</text>
+  <path class="line" d="M300 870 H35 V140 H285"/>
+  <text class="label" x="260" y="858">Sí</text>
+</svg>
