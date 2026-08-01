@@ -1,17 +1,21 @@
 # Pruebas y calidad
 
-Este directorio reúne las pruebas automatizadas del proyecto. Su finalidad es comprobar que las jugadas respetan las reglas de piedra, papel o tijeras y mantener un criterio común para las pruebas que se incorporen en el futuro.
+Este directorio reúne las pruebas automatizadas de los componentes actualmente
+implementados: `TipoJugada`, la jerarquía de jugadas y su fábrica.
 
-## Pruebas actuales
+`Partida` y la interfaz de consola todavía no tienen lógica implementada, por lo
+que sus pruebas se incorporarán cuando esos componentes estén disponibles.
 
-La batería está distribuida según la responsabilidad evaluada:
+## Arquitectura actual de pruebas
 
-| Archivo           | Responsabilidad                                                |
-| ----------------- | -------------------------------------------------------------- |
-| `test_jugada.py`  | Comprueba el contrato y el comportamiento común de una jugada. |
-| `test_piedra.py`  | Comprueba las reglas específicas de piedra.                    |
-| `test_papel.py`   | Comprueba las reglas específicas de papel.                     |
-| `test_tijeras.py` | Comprueba las reglas específicas de tijeras.                   |
+| Archivo                       | Estado    | Responsabilidad                                      |
+| ----------------------------- | --------- | ---------------------------------------------------- |
+| `models/jugadas/test_jugada.py`          | Parcial   | Contrato común y comportamiento base de `Jugada`.    |
+| `models/jugadas/test_fabrica_jugadas.py` | Cubierto  | Creación de jugadas y validación del tipo recibido.  |
+| `models/jugadas/test_piedra.py`          | Pendiente | Comportamiento específico de `Piedra`.               |
+| `models/jugadas/test_papel.py`           | Pendiente | Comportamiento específico de `Papel`.                |
+| `models/jugadas/test_tijeras.py`         | Pendiente | Comportamiento específico de `Tijeras`.              |
+| `models/test_tipo_jugada.py`             | Pendiente | Valores y representación textual de `TipoJugada`.    |
 
 ## Convenciones generales
 
@@ -20,8 +24,8 @@ La batería está distribuida según la responsabilidad evaluada:
 - Las pruebas deben ser independientes y no compartir estado mutable.
 - El resultado no debe depender del orden de ejecución.
 - Los casos equivalentes deben agruparse mediante parametrización con pytest.
-- Cada nuevo componente debe disponer de un archivo de prueba con el patrón `test_<componente>.py`.
-- Las pruebas deben centrarse en el comportamiento observable, no en detalles internos de implementación.
+- Cada nuevo componente debe disponer de un archivo `test_<componente>.py`.
+- Las pruebas deben centrarse en el comportamiento observable.
 
 ## Ejecución
 
@@ -31,45 +35,63 @@ Desde el directorio raíz del proyecto:
 pytest
 ```
 
-## Detalle de las pruebas
+## Estado de la cobertura funcional
 
-Las siguientes cuestiones definen los comportamientos que deberán comprobarse.
+Las casillas marcadas representan pruebas presentes en la batería actual. Las
+casillas pendientes señalan comportamientos implementados que todavía no están
+cubiertos por una prueba.
 
 ### `test_jugada.py`
 
-Contrato y comportamiento común de una jugada:
+- [x] `Jugada` no puede instanciarse directamente por ser una clase abstracta.
+- [ ] `vence_a()` devuelve `True` cuando la jugada vence a la recibida.
+- [ ] `vence_a()` devuelve `False` ante una derrota o un empate.
+- [ ] `vence_a()` rechaza valores que no sean instancias de `Jugada`.
+- [ ] La representación textual de una jugada coincide con su tipo.
 
-- [ ] Al crear una jugada con un tipo permitido, debe obtenerse una jugada válida.
-- [ ] La clase debe definir cómo se compara con otra jugada.
-- [ ] La comparación debe devolver un resultado coherente y predecible.
-- [ ] La clase debe rechazar o gestionar una comparación con un valor no válido.
+### `test_fabrica_jugadas.py`
 
-### Batería común para piedra, papel y tijeras
+- [x] `TipoJugada.PIEDRA` produce una instancia de `Piedra`.
+- [x] `TipoJugada.PAPEL` produce una instancia de `Papel`.
+- [x] `TipoJugada.TIJERAS` produce una instancia de `Tijeras`.
+- [x] La fábrica rechaza valores que no sean instancias de `TipoJugada`.
 
-Los tres tipos de jugada comparten la misma batería de casos:
+### `test_tipo_jugada.py`
 
-- [ ] La clase debe poder instanciarse correctamente.
-- [ ] La jugada debe vencer a la jugada correspondiente.
-- [ ] La jugada debe perder frente a la jugada correspondiente.
-- [ ] La jugada debe empatar con otra instancia del mismo tipo.
-- [ ] La comparación debe devolver un resultado coherente y predecible.
+- [ ] El enumerado define los tipos piedra, papel y tijeras.
+- [ ] Cada tipo conserva el valor textual esperado.
+- [ ] La conversión a texto devuelve el valor de la jugada.
 
-Los casos equivalentes deben parametrizarse para evitar repetir la misma lógica en distintos archivos.
+### Batería común de jugadas concretas
 
-### `test_piedra.py`
+Estos casos corresponden a `test_piedra.py`, `test_papel.py` y
+`test_tijeras.py`. Actualmente, los tres archivos están vacíos.
 
-- [ ] Piedra debe vencer a tijeras.
-- [ ] Piedra debe perder frente a papel.
-- [ ] Piedra debe empatar con piedra.
+- [ ] Cada clase puede instanciarse correctamente.
+- [ ] Cada instancia expone su `tipo` y `nombre` correspondientes.
+- [ ] Cada jugada vence a la jugada definida por sus reglas.
+- [ ] Cada jugada pierde frente a la jugada correspondiente.
+- [ ] Cada jugada empata con otra instancia del mismo tipo.
 
-### `test_papel.py`
+#### `test_piedra.py`
 
-- [ ] Papel debe vencer a piedra.
-- [ ] Papel debe perder frente a tijeras.
-- [ ] Papel debe empatar con papel.
+- [ ] Piedra vence a tijeras.
+- [ ] Piedra pierde frente a papel.
+- [ ] Piedra empata con piedra.
 
-### `test_tijeras.py`
+#### `test_papel.py`
 
-- [ ] Tijeras debe vencer a papel.
-- [ ] Tijeras debe perder frente a piedra.
-- [ ] Tijeras debe empatar con tijeras.
+- [ ] Papel vence a piedra.
+- [ ] Papel pierde frente a tijeras.
+- [ ] Papel empata con papel.
+
+#### `test_tijeras.py`
+
+- [ ] Tijeras vence a papel.
+- [ ] Tijeras pierde frente a piedra.
+- [ ] Tijeras empata con tijeras.
+
+## Componentes futuros
+
+Las pruebas de `Partida`, jugadores y la interfaz de consola quedan fuera de la
+batería actual porque esos componentes todavía no están implementados.

@@ -83,11 +83,13 @@ piedra-papel-tijeras/
 |           `-- partida.py
 |-- tests/
 |   |-- README.md
-|   |-- test_fabrica_jugadas.py
-|   |-- test_jugada.py
-|   |-- test_papel.py
-|   |-- test_piedra.py
-|   `-- test_tijeras.py
+|   `-- models/
+|       `-- jugadas/
+|           |-- test_fabrica_jugadas.py
+|           |-- test_jugada.py
+|           |-- test_papel.py
+|           |-- test_piedra.py
+|           `-- test_tijeras.py
 |-- docs/
 |   |-- diagrama_clases_piedra_papel_tijeras.svg
 |   `-- diagrama_flujo_piedra_papel_tijeras.svg
