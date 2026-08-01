@@ -1,25 +1,14 @@
 from .jugada import Jugada
+from .tipo_jugada import TipoJugada
 
 
 class Papel(Jugada):
-    """clase del tipo Jugada
-    args:
-      name
+    """clase de tipo_jugada.PAPEL. vence a tipo_jugada.PIEDRA"""
 
-    def:
-      __str__()
-      vence_a()
-    """
+    @property
+    def tipo(self) -> TipoJugada:
+        return TipoJugada.PAPEL
 
-    def __init__(self, name: str = "Papel") -> None:
-        """inicializa los atributos de la instancia de clase heredada"""
-
-        super().__init__(name)
-
-    def __str__(self) -> str:
-        return f"Jugada: {self.name}"
-
-    def vence_a(self, otra: Jugada) -> bool:
-        """devuelve true si el nombre de la otra jugada es piedra
-        return: bool"""
-        return otra.__str__ == "Piedra"
+    @property
+    def vence_a_tipo(self) -> TipoJugada:
+        return TipoJugada.PIEDRA

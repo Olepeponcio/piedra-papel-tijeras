@@ -1,36 +1,33 @@
-from __future__ import annotations
-
 from abc import ABC, abstractmethod
+from tipo_jugada import TipoJugada
 
 
 class Jugada(ABC):
-    """clase abstracta de la que heredan Piedra, Papel y Tijeras
-    args:
-      name: str
+    """Contrato común para las jugadas del juego."""
 
-    abstractmethod:
-      __str__(self) -> str:"""
-
-    def __init__(self, name: str) -> None:
-        """define la instancia del objeto
-        args:
-          name: str
-        attributes:
-          self.name"""
-
-        self.name = name
-
+    @property
     @abstractmethod
-    def __str__(self) -> str:
-        """devuelve un f str con los datos name y type del objeto"""
+    def tipo(self) -> TipoJugada:
+        """Devuelve el tipo de la jugada"""
 
-        return f"Name: {self.name}. Type: {type(self)}"
-
+    @property
     @abstractmethod
+    def nombre(self) -> TipoJugada:
+        """Devuelve el nombre de la jugada."""
+
+    @property
+    @abstractmethod
+    def vence_a_tipo(self) -> TipoJugada:
+        """devuelve el tipo de jugada al que vence"""
+
     def vence_a(self, otra: Jugada) -> bool:
-        """Devuelve true si el objeto Jugada vence a otra
-        args:
-          otra: Jugada
+        """Indica si esta jugada vence a otra."""
 
-        return:
-          bool"""
+        if not isinstance(otra, Jugada):
+            raise TypeError("Otra debe ser una instancia de Jugada")
+
+        return otra.tipo is self.vence_a_tipo
+
+    def __str__(self) -> str:
+        """Devuelve la representación textual de la jugada."""
+        return str(self.tipo)

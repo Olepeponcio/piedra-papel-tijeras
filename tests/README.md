@@ -39,7 +39,7 @@ Las siguientes cuestiones definen los comportamientos que deberán comprobarse.
 
 Contrato y comportamiento común de una jugada:
 
-- [ ] La clase debe representar una jugada válida.
+- [ ] Al crear una jugada con un tipo permitido, debe obtenerse una jugada válida.
 - [ ] La clase debe definir cómo se compara con otra jugada.
 - [ ] La comparación debe devolver un resultado coherente y predecible.
 - [ ] La clase debe rechazar o gestionar una comparación con un valor no válido.
