@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1400" height="1120" viewBox="0 0 1400 1120" role="img" aria-labelledby="title desc">
   <title id="title">Diagrama de clases de piedra, papel y tijeras</title>
-  <desc id="desc">Diagrama UML de las jugadas, sus tipos, los jugadores, la partida y el resultado.</desc>
+  <desc id="desc">Diagrama UML de las jugadas, su fábrica, sus tipos, los jugadores, la partida y el resultado.</desc>
   <defs>
     <style>
       text { font-family: Arial, sans-serif; fill: #172033; }
@@ -29,7 +29,7 @@
     </marker>
   </defs>
 
-  <text class="section" x="40" y="35">Jerarquía y reglas de las jugadas</text>
+  <text class="section" x="40" y="35">models/jugadas: jerarquía, fábrica y reglas</text>
 
   <g>
     <rect class="enum" x="40" y="65" width="270" height="170" rx="6"/>
@@ -58,6 +58,21 @@
 
   <path class="relation" marker-end="url(#arrow)" d="M465 150 H310"/>
   <text class="label" x="388" y="139">utiliza</text>
+
+  <g>
+    <rect class="box" x="1010" y="65" width="350" height="155" rx="6"/>
+    <text class="stereotype" x="1185" y="89">&lt;&lt;fábrica&gt;&gt;</text>
+    <text class="name" x="1185" y="115">FabricaJugadas</text>
+    <line class="divider" x1="1010" y1="128" x2="1360" y2="128"/>
+    <text class="member" x="1026" y="157">- _CONSTRUCTORES: dict</text>
+    <line class="divider" x1="1010" y1="172" x2="1360" y2="172"/>
+    <text class="member" x="1026" y="201">+ crear_jugada(tipo: TipoJugada): Jugada</text>
+  </g>
+
+  <path class="relation" marker-end="url(#arrow)" d="M1010 105 H935"/>
+  <text class="label" x="973" y="94">devuelve</text>
+  <path class="relation" marker-end="url(#arrow)" d="M1010 145 H965 V285 H175 V235"/>
+  <text class="label" x="565" y="276">recibe TipoJugada</text>
 
   <g>
     <rect class="box" x="80" y="385" width="340" height="145" rx="6"/>
@@ -90,6 +105,11 @@
   <path class="relation" marker-end="url(#inherit)" d="M700 385 V260"/>
   <path class="relation" marker-end="url(#inherit)" d="M1150 385 V325 H750 V260"/>
   <text class="label" x="700" y="315">herencia</text>
+
+  <path class="relation" marker-end="url(#arrow)" d="M1090 220 V350 H250 V385"/>
+  <path class="relation" marker-end="url(#arrow)" d="M1185 220 V350 H700 V385"/>
+  <path class="relation" marker-end="url(#arrow)" d="M1280 220 V350 H1150 V385"/>
+  <text class="label" x="1185" y="340">crea</text>
 
   <path class="rule" marker-end="url(#rule-arrow)" d="M250 530 V585 H1150 V530"/>
   <text class="label" x="700" y="578">vence a</text>
@@ -157,5 +177,5 @@
   <path class="relation" marker-end="url(#arrow)" d="M240 665 V605 H610 V530"/>
   <text class="label" x="425" y="594">elige Jugada</text>
 
-  <text class="footnote" x="700" y="1105">Abstracción, herencia y reglas de dominio basadas en TipoJugada</text>
+  <text class="footnote" x="700" y="1105">La fábrica centraliza la creación; Jugada y sus clases hijas conservan sus responsabilidades</text>
 </svg>
