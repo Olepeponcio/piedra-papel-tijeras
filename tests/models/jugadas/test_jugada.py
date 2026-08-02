@@ -37,7 +37,9 @@ def test_jugada_pierde_contra(otra_jugada: Jugada, jugada: Jugada) -> None:
 
 
 # `vence_a()` devuelve `False` ante una derrota o un empate.
-def test_jugada_empata_contra(jugada: Jugada, jugada_empate: Jugada) -> None:
+def test_jugada_empata_contra_otra_jugada(
+    jugada: Jugada, jugada_empate: Jugada
+) -> None:
     assert jugada.vence_a(jugada_empate) is False and jugada.tipo == jugada_empate.tipo
 
 

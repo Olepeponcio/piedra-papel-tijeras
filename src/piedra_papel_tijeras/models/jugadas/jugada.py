@@ -15,11 +15,6 @@ class Jugada(ABC):
 
     @property
     @abstractmethod
-    def nombre(self) -> str:
-        """Devuelve el nombre de la jugada."""
-
-    @property
-    @abstractmethod
     def _vence_a_tipo(self) -> TipoJugada:
         """Devuelve el tipo de jugada al que vence."""
 

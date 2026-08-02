@@ -74,38 +74,38 @@ cubiertos por una prueba.
 
 ### `test_tipo_jugada.py`
 
-- [ ] El enumerado define los tipos piedra, papel y tijeras.
-- [ ] Cada tipo conserva el valor textual esperado.
-- [ ] La conversión a texto devuelve el valor de la jugada.
+- [x] El enumerado define los tipos piedra, papel y tijeras.
+- [x] Cada tipo conserva el valor textual esperado.
+- [x] La conversión a texto devuelve el valor de la jugada.
 
 ### Batería común de jugadas concretas
 
 Estos casos corresponden a `test_piedra.py`, `test_papel.py` y
-`test_tijeras.py`. Actualmente, los tres archivos están vacíos.
+`test_tijeras.py`.
 
-- [ ] Cada clase puede instanciarse correctamente.
-- [ ] Cada instancia expone su `tipo` y `nombre` correspondientes.
-- [ ] Cada jugada vence a la jugada definida por sus reglas.
-- [ ] Cada jugada pierde frente a la jugada correspondiente.
-- [ ] Cada jugada empata con otra instancia del mismo tipo.
+- [x] Cada clase puede instanciarse correctamente.
+- [x] Cada instancia expone su `tipo` y `nombre` correspondientes.
+- [x] Cada jugada vence a la jugada definida por sus reglas.
+- [x] Cada jugada pierde frente a la jugada correspondiente.
+- [x] Cada jugada empata con otra instancia del mismo tipo.
 
 #### `test_piedra.py`
 
-- [ ] Piedra vence a tijeras.
-- [ ] Piedra pierde frente a papel.
-- [ ] Piedra empata con piedra.
+- [x] Piedra vence a tijeras.
+- [x] Piedra pierde frente a papel.
+- [x] Piedra empata con piedra.
 
 #### `test_papel.py`
 
-- [ ] Papel vence a piedra.
-- [ ] Papel pierde frente a tijeras.
-- [ ] Papel empata con papel.
+- [x] Papel vence a piedra.
+- [x] Papel pierde frente a tijeras.
+- [x] Papel empata con papel.
 
 #### `test_tijeras.py`
 
-- [ ] Tijeras vence a papel.
-- [ ] Tijeras pierde frente a piedra.
-- [ ] Tijeras empata con tijeras.
+- [x] Tijeras vence a papel.
+- [x] Tijeras pierde frente a piedra.
+- [x] Tijeras empata con tijeras.
 
 ## Componentes futuros
 
