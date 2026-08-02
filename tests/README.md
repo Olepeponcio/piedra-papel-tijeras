@@ -8,8 +8,8 @@ que sus pruebas se incorporarán cuando esos componentes estén disponibles.
 
 ## Arquitectura actual de pruebas
 
-| Archivo                       | Estado    | Responsabilidad                                      |
-| ----------------------------- | --------- | ---------------------------------------------------- |
+| Archivo                                    | Estado    | Responsabilidad                                      |
+| ------------------------------------------ | --------- | ---------------------------------------------------- |
 | `models/jugadas/test_jugada.py`          | Parcial   | Contrato común y comportamiento base de `Jugada`.    |
 | `models/jugadas/test_fabrica_jugadas.py` | Cubierto  | Creación de jugadas y validación del tipo recibido.  |
 | `models/jugadas/test_piedra.py`          | Pendiente | Comportamiento específico de `Piedra`.               |
@@ -31,9 +31,14 @@ que sus pruebas se incorporarán cuando esos componentes estén disponibles.
 
 Desde el directorio raíz del proyecto:
 
-```bash
+```powershell
+$env:PYTHONPATH="src"
 pytest
 ```
+
+La variable permite que Python encuentre el paquete `piedra_papel_tijeras`,
+ubicado dentro de `src`. Debe establecerse de nuevo al abrir una sesión nueva de
+PowerShell.
 
 ## Estado de la cobertura funcional
 

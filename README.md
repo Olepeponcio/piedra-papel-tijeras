@@ -45,9 +45,11 @@ python -m pip install -r requirements.txt
 
 ## Ejecución
 
-La interfaz CLI aún no está implementada. Cuando esté disponible, el punto de entrada previsto será:
+La interfaz CLI aún no está implementada. Cuando esté disponible, `src` deberá
+estar en la ruta de importación. Desde PowerShell:
 
-```bash
+```powershell
+$env:PYTHONPATH="src"
 python -m piedra_papel_tijeras.main
 ```
 

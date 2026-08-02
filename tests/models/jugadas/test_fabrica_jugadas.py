@@ -25,4 +25,3 @@ def test_crear_jugada_devuelve_la_clase_correspondiente(
 def test_crear_jugada_rechaza_un_tipo_invalido() -> None:
     with pytest.raises(TypeError):
         crear_jugada("Piedra")  # type: ignore[arg-type]
-
