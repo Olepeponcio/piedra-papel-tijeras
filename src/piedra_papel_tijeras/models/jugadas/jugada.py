@@ -33,4 +33,3 @@ class Jugada(ABC):
     def __str__(self) -> str:
         """Devuelve la representación textual de la jugada."""
         return str(self.tipo)
-

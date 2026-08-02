@@ -1,0 +1,64 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+
+[project]
+name = "piedra-papel-tijeras"
+version = "0.0.1"
+description = "Aplicación de consola para jugar a piedra, papel o tijeras"
+readme = "README.md"
+requires-python = ">=3.14"
+
+keywords = [
+    "python",
+    "cli",
+    "juego",
+    "piedra-papel-tijeras",
+]
+
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Environment :: Console",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.14",
+    "Operating System :: OS Independent",
+    "Typing :: Typed",
+]
+
+# Actualmente, el programa solo utiliza la biblioteca estándar de Python.
+dependencies = []
+
+
+[project.optional-dependencies]
+dev = [
+    "pytest==9.1.1",
+    "ruff==0.16.1",
+    "mypy==2.3.0",
+]
+
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["piedra_papel_tijeras*"]
+namespaces = false
+
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+pythonpath = ["src"]
+addopts = "-ra"
+
+
+[tool.ruff]
+target-version = "py314"
+line-length = 88
+src = ["src", "tests"]
+
+
+[tool.mypy]
+python_version = "3.14"
+strict = true
+mypy_path = "src"

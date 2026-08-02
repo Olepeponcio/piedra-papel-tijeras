@@ -8,14 +8,14 @@ que sus pruebas se incorporarán cuando esos componentes estén disponibles.
 
 ## Arquitectura actual de pruebas
 
-| Archivo                                    | Estado    | Responsabilidad                                      |
-| ------------------------------------------ | --------- | ---------------------------------------------------- |
-| `models/jugadas/test_jugada.py`          | Parcial   | Contrato común y comportamiento base de `Jugada`.    |
-| `models/jugadas/test_fabrica_jugadas.py` | Cubierto  | Creación de jugadas y validación del tipo recibido.  |
-| `models/jugadas/test_piedra.py`          | Pendiente | Comportamiento específico de `Piedra`.               |
-| `models/jugadas/test_papel.py`           | Pendiente | Comportamiento específico de `Papel`.                |
-| `models/jugadas/test_tijeras.py`         | Pendiente | Comportamiento específico de `Tijeras`.              |
-| `models/test_tipo_jugada.py`             | Pendiente | Valores y representación textual de `TipoJugada`.    |
+| Archivo                                  | Estado    | Responsabilidad                                     |
+| ---------------------------------------- | --------- | --------------------------------------------------- |
+| `models/jugadas/test_jugada.py`          | Parcial   | Contrato común y comportamiento base de `Jugada`.   |
+| `models/jugadas/test_fabrica_jugadas.py` | Cubierto  | Creación de jugadas y validación del tipo recibido. |
+| `models/jugadas/test_piedra.py`          | Pendiente | Comportamiento específico de `Piedra`.              |
+| `models/jugadas/test_papel.py`           | Pendiente | Comportamiento específico de `Papel`.               |
+| `models/jugadas/test_tijeras.py`         | Pendiente | Comportamiento específico de `Tijeras`.             |
+| `models/test_tipo_jugada.py`             | Pendiente | Valores y representación textual de `TipoJugada`.   |
 
 ## Convenciones generales
 
@@ -29,16 +29,27 @@ que sus pruebas se incorporarán cuando esos componentes estén disponibles.
 
 ## Ejecución
 
-Desde el directorio raíz del proyecto:
+La configuración de pytest está centralizada en `pyproject.toml`. Después de
+instalar el proyecto y las dependencias de desarrollo:
 
 ```powershell
-$env:PYTHONPATH="src"
+python -m pip install -e ".[dev]"
+```
+
+puede ejecutarse toda la batería:
+
+```powershell
 pytest
 ```
 
-La variable permite que Python encuentre el paquete `piedra_papel_tijeras`,
-ubicado dentro de `src`. Debe establecerse de nuevo al abrir una sesión nueva de
-PowerShell.
+O un módulo concreto:
+
+```powershell
+pytest tests/models/jugadas/test_jugada.py
+```
+
+La instalación editable y la propiedad `pythonpath = ["src"]` permiten importar
+`piedra_papel_tijeras` sin configurar `PYTHONPATH` manualmente.
 
 ## Estado de la cobertura funcional
 
@@ -49,10 +60,10 @@ cubiertos por una prueba.
 ### `test_jugada.py`
 
 - [x] `Jugada` no puede instanciarse directamente por ser una clase abstracta.
-- [ ] `vence_a()` devuelve `True` cuando la jugada vence a la recibida.
-- [ ] `vence_a()` devuelve `False` ante una derrota o un empate.
-- [ ] `vence_a()` rechaza valores que no sean instancias de `Jugada`.
-- [ ] La representación textual de una jugada coincide con su tipo.
+- [x] `vence_a()` devuelve `True` cuando la jugada vence a la recibida.
+- [x] `vence_a()` devuelve `False` ante una derrota o un empate.
+- [x] `vence_a()` rechaza valores que no sean instancias de `Jugada`.
+- [x] La representación textual de una jugada coincide con su tipo.
 
 ### `test_fabrica_jugadas.py`
 

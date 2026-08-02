@@ -20,7 +20,7 @@ Construir una aplicación CLI sencilla y mantenible que permita al usuario elegi
 
 ## Requisitos
 
-- Python 3.
+- Python 3.14 o superior.
 - pip.
 
 ## Instalación
@@ -37,21 +37,36 @@ Actívalo en Windows PowerShell:
 .\.venv\Scripts\Activate.ps1
 ```
 
-Instala las dependencias:
+Instala el proyecto en modo editable junto con las herramientas de desarrollo:
 
-```bash
-python -m pip install -r requirements.txt
+```powershell
+python -m pip install -e ".[dev]"
 ```
+
+La instalación editable conecta el entorno virtual con el código de `src`, por
+lo que los cambios en los módulos quedan disponibles sin reinstalar el paquete.
 
 ## Ejecución
 
-La interfaz CLI aún no está implementada. Cuando esté disponible, `src` deberá
-estar en la ruta de importación. Desde PowerShell:
+La interfaz CLI aún no está implementada. Cuando esté disponible, el punto de
+entrada previsto será:
 
 ```powershell
-$env:PYTHONPATH="src"
 python -m piedra_papel_tijeras.main
 ```
+
+## Comprobaciones de desarrollo
+
+Con el entorno virtual activo y el proyecto instalado:
+
+```powershell
+pytest
+ruff check .
+mypy src
+```
+
+La configuración de estas herramientas se centraliza en `pyproject.toml`. No es
+necesario establecer `PYTHONPATH` manualmente.
 
 ## Arquitectura del proyecto
 
@@ -93,9 +108,11 @@ piedra-papel-tijeras/
 |           |-- test_piedra.py
 |           `-- test_tijeras.py
 |-- docs/
+|   |-- guia_pyproject_toml.md
 |   |-- diagrama_clases_piedra_papel_tijeras.svg
 |   `-- diagrama_flujo_piedra_papel_tijeras.svg
 |-- AGENTS.md
+|-- pyproject.toml
 |-- README.md
 `-- requirements.txt
 ```
@@ -151,6 +168,7 @@ main.py
 ## Documentación
 
 - [Pruebas y calidad](tests/README.md)
+- [Guía de configuración de pyproject.toml](docs/guia_pyproject_toml.md)
 - [Diagrama de clases](docs/diagrama_clases_piedra_papel_tijeras.svg)
 - [Diagrama de flujo](docs/diagrama_flujo_piedra_papel_tijeras.svg)
 
@@ -160,4 +178,5 @@ main.py
 - pytest: pruebas automatizadas.
 - Ruff: análisis estático y formato.
 - mypy: comprobación estática de tipos.
+- setuptools: construcción e instalación editable del paquete.
 - Git y GitHub: control de versiones y alojamiento remoto.
