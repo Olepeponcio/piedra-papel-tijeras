@@ -7,9 +7,8 @@ from piedra_papel_tijeras.models.tipo_jugada import TipoJugada
 
 class Jugador(ABC):
     def __init__(self, nombre: str) -> None:
-        """inicializa el nombre
-        args:
-          nombre: str
+        """Contrato común para los objetos jugador_humano y
+        jugador_maquina
         """
         self.nombre = nombre
 
@@ -18,5 +17,6 @@ class Jugador(ABC):
         """devuelve el tipo de jugada seleccionado"""
 
     def elegir_jugada(self) -> Jugada:
-        """devuelve un objeto de la clase Jugada según la seleccion fijada"""
+        """devuelve un objeto de la clase Jugada según la seleccion fijada
+        desde la clase fabrica_jugadas"""
         return crear_jugada(self._seleccionar_tipo())
