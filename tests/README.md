@@ -1,21 +1,22 @@
 # Pruebas y calidad
 
 Este directorio reúne las pruebas automatizadas de los componentes actualmente
-implementados: `TipoJugada`, la jerarquía de jugadas y su fábrica.
+implementados: `TipoJugada`, la jerarquía de jugadas, su fábrica y los jugadores.
 
 `Partida` y la interfaz de consola todavía no tienen lógica implementada, por lo
 que sus pruebas se incorporarán cuando esos componentes estén disponibles.
 
 ## Arquitectura actual de pruebas
 
-| Archivo                                  | Estado    | Responsabilidad                                     |
-| ---------------------------------------- | --------- | --------------------------------------------------- |
-| `models/jugadas/test_jugada.py`          | Parcial   | Contrato común y comportamiento base de `Jugada`.   |
-| `models/jugadas/test_fabrica_jugadas.py` | Cubierto  | Creación de jugadas y validación del tipo recibido. |
-| `models/jugadas/test_piedra.py`          | Pendiente | Comportamiento específico de `Piedra`.              |
-| `models/jugadas/test_papel.py`           | Pendiente | Comportamiento específico de `Papel`.               |
-| `models/jugadas/test_tijeras.py`         | Pendiente | Comportamiento específico de `Tijeras`.             |
-| `models/test_tipo_jugada.py`             | Pendiente | Valores y representación textual de `TipoJugada`.   |
+| Archivo                                   | Responsabilidad                                     |
+| ----------------------------------------- | --------------------------------------------------- |
+| `models/jugadas/test_jugada.py`           | Contrato común y comportamiento base de `Jugada`.   |
+| `models/jugadas/test_fabrica_jugadas.py`  | Creación de jugadas y validación del tipo recibido. |
+| `models/jugadas/test_piedra.py`           | Comportamiento específico de `Piedra`.              |
+| `models/jugadas/test_papel.py`            | Comportamiento específico de `Papel`.               |
+| `models/jugadas/test_tijeras.py`          | Comportamiento específico de `Tijeras`.             |
+| `models/jugadores/test_jugador_humano.py` | Selección y creación de jugadas del jugador humano. |
+| `models/test_tipo_jugada.py`              | Valores y representación textual de `TipoJugada`.   |
 
 ## Convenciones generales
 
@@ -107,7 +108,18 @@ Estos casos corresponden a `test_piedra.py`, `test_papel.py` y
 - [x] Tijeras pierde frente a piedra.
 - [x] Tijeras empata con tijeras.
 
+### `test_jugador_humano.py`
+
+- [ ] Conserva el nombre recibido al construir el jugador.
+- [ ] Convierte piedra, papel y tijeras en su `TipoJugada` correspondiente.
+- [ ] Acepta diferencias de mayúsculas y espacios exteriores.
+- [ ] Rechaza una entrada inválida y vuelve a solicitarla.
+- [ ] Tras una entrada inválida, devuelve el tipo correspondiente a la siguiente
+      entrada válida.
+- [ ] `elegir_jugada()` devuelve la `Jugada` concreta correspondiente a la
+      selección.
+
 ## Componentes futuros
 
-Las pruebas de `Partida`, jugadores y la interfaz de consola quedan fuera de la
-batería actual porque esos componentes todavía no están implementados.
+Las pruebas de `Partida`, `JugadorMaquina` y la interfaz de consola quedan fuera
+de la batería actual porque esos componentes todavía no están implementados.
