@@ -1,7 +1,8 @@
 from abc import ABC, abstractmethod
-from piedra_papel_tijeras.models.tipo_jugada import TipoJugada
-from piedra_papel_tijeras.models.jugadas.jugada import Jugada
+
 from piedra_papel_tijeras.models.jugadas.fabrica_jugadas import crear_jugada
+from piedra_papel_tijeras.models.jugadas.jugada import Jugada
+from piedra_papel_tijeras.models.tipo_jugada import TipoJugada
 
 
 class Jugador(ABC):

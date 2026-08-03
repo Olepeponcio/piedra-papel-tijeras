@@ -1,10 +1,9 @@
 import pytest
 
-from piedra_papel_tijeras.models.jugadas.jugada import Jugada
-from piedra_papel_tijeras.models.tipo_jugada import TipoJugada
 from piedra_papel_tijeras.models.jugadas.papel import Papel
 from piedra_papel_tijeras.models.jugadas.piedra import Piedra
 from piedra_papel_tijeras.models.jugadas.tijeras import Tijeras
+from piedra_papel_tijeras.models.tipo_jugada import TipoJugada
 
 
 # Cada clase puede instanciarse correctamente.
@@ -34,7 +33,6 @@ def test_cada_jugada_vence_segun_sus_reglas_definidas() -> None:
 
 # Cada jugada pierde frente a la jugada correspondiente.
 def test_cada_jugada_pierde_frente_a_la_jugada_correspondiente() -> None:
-    tijeras = Tijeras()
 
     assert not Tijeras().vence_a(Piedra())
 

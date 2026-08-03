@@ -6,17 +6,17 @@ from piedra_papel_tijeras.models.jugadas.tijeras import Tijeras
 
 
 @pytest.fixture
-def jugada():
+def jugada() -> Piedra:
     return Piedra()
 
 
 @pytest.fixture
-def jugada_empate():
+def jugada_empate() -> Piedra:
     return Piedra()
 
 
 @pytest.fixture
-def otra_jugada():
+def otra_jugada() -> Tijeras:
     return Tijeras()
 
 
