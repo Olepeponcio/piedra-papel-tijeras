@@ -12,5 +12,5 @@ class JugadorMaquina(Jugador):
     def __init__(self, nombre: str = "IA-Player") -> None:
         super().__init__(nombre)
 
-    def _seleccionar_tipo(self) -> TipoJugada:
-        """devuelve el tipo de jugada seleccionado"""
+    # def _seleccionar_tipo(self) -> TipoJugada:
+    #     """devuelve el tipo de jugada seleccionado"""

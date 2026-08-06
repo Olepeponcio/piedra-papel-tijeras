@@ -110,13 +110,14 @@ Estos casos corresponden a `test_piedra.py`, `test_papel.py` y
 
 ### `test_jugador_humano.py`
 
-- [ ] Conserva el nombre recibido al construir el jugador.
-- [ ] Convierte piedra, papel y tijeras en su `TipoJugada` correspondiente.
-- [ ] Acepta diferencias de mayúsculas y espacios exteriores.
-- [ ] Rechaza una entrada inválida y vuelve a solicitarla.
-- [ ] Tras una entrada inválida, devuelve el tipo correspondiente a la siguiente
+- [x] Conserva el nombre recibido al construir el jugador.
+- [x] El método `__str__` devuelve la cadena correcta
+- [x] Convierte piedra, papel y tijeras en su `TipoJugada` correspondiente.
+- [x] Acepta diferencias de mayúsculas y espacios exteriores.
+- [x] Rechaza una entrada inválida y vuelve a solicitarla.
+- [x] Tras una entrada inválida, devuelve el tipo correspondiente a la siguiente
       entrada válida.
-- [ ] `elegir_jugada()` devuelve la `Jugada` concreta correspondiente a la
+- [x] `elegir_jugada()` devuelve la `Jugada` concreta correspondiente a la
       selección.
 
 ## Componentes futuros

@@ -20,3 +20,7 @@ class Jugador(ABC):
         """devuelve un objeto de la clase Jugada según la seleccion fijada
         desde la clase fabrica_jugadas"""
         return crear_jugada(self._seleccionar_tipo())
+
+    def __str__(self) -> str:
+        """devuelve la cadena de texto con el nombre según constructor"""
+        return f"Nombre: {self.nombre}"
