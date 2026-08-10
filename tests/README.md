@@ -1,10 +1,8 @@
 # Pruebas y calidad
 
 Este directorio reúne las pruebas automatizadas de los componentes actualmente
-implementados: `TipoJugada`, la jerarquía de jugadas, su fábrica y los jugadores.
-
-`Partida` y la interfaz de consola todavía no tienen lógica implementada, por lo
-que sus pruebas se incorporarán cuando esos componentes estén disponibles.
+implementados: tipos, resultados, jugadas, jugadores, partida e interfaz de
+consola.
 
 ## Arquitectura actual de pruebas
 
@@ -17,7 +15,10 @@ que sus pruebas se incorporarán cuando esos componentes estén disponibles.
 | `models/jugadas/test_tijeras.py`          | Comportamiento específico de `Tijeras`.             |
 | `models/jugadores/test_jugador_humano.py` | Selección y creación de jugadas del jugador humano. |
 | `models/jugadores/test_jugador_maquina.py` | Selección aleatoria de jugadas de la máquina.        |
+| `models/test_resultado.py`                 | Valores y representación de los resultados.         |
 | `models/test_tipo_jugada.py`              | Valores y representación textual de `TipoJugada`.   |
+| `services/test_partida.py`                | Resolución de victoria, derrota y empate.            |
+| `test_main.py`                            | Validación de entrada y ejecución de la CLI.         |
 
 ## Convenciones generales
 
@@ -131,7 +132,16 @@ Estos casos corresponden a `test_piedra.py`, `test_papel.py` y
 - [x] `elegir_jugada()` devuelve `Piedra`, `Papel` o `Tijeras` según el tipo
       seleccionado.
 
-## Componentes futuros
+### `test_resultado.py`
 
-Las pruebas de `Partida` y la interfaz de consola quedan fuera de la batería
-actual porque esos componentes todavía no están implementados.
+- [x] Cada resultado conserva su valor y representación textual.
+
+### `test_partida.py`
+
+- [x] Resuelve victoria, derrota y empate desde la perspectiva humana.
+
+### `test_main.py`
+
+- [x] Normaliza una entrada válida.
+- [x] Repite la solicitud después de una entrada inválida.
+- [x] Ejecuta una ronda completa y muestra su resultado.

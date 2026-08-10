@@ -1,27 +1,20 @@
+from collections.abc import Callable
+
 from piedra_papel_tijeras.models.jugadores.jugador import Jugador
 from piedra_papel_tijeras.models.tipo_jugada import TipoJugada
 
 
 class JugadorHumano(Jugador):
-    """contrato Jugador. Recibe la seleccion de jugada por input
-    del usuario. hereda elegir_jugada()->Jugada"""
+    """Jugador cuyo tipo de jugada procede de un selector externo."""
 
-    def __init__(self, nombre: str) -> None:
+    def __init__(
+        self,
+        nombre: str,
+        selector_tipo: Callable[[], TipoJugada],
+    ) -> None:
         super().__init__(nombre)
+        self._selector_tipo = selector_tipo
 
     def _seleccionar_tipo(self) -> TipoJugada:
-        """Solicita y valida un tipo de jugada."""
-
-        while True:
-            entrada = (
-                input(f"{self.nombre}, elige piedra, papel o tijeras: ")
-                .strip()
-                .capitalize()
-            )
-
-            try:
-                return TipoJugada(entrada)
-            except ValueError:
-                print(
-                    "Elección no válida. " "Debes introducir piedra, papel o tijeras."
-                )
+        """Devuelve el tipo proporcionado por el selector configurado."""
+        return self._selector_tipo()

@@ -2,7 +2,7 @@
 
 Aplicación de consola desarrollada en Python para jugar a piedra, papel o tijeras contra el programa.
 
-> **Estado:** proyecto en desarrollo. La estructura inicial está creada, pero la interfaz de consola y la lógica de la partida todavía no están implementadas.
+> **Estado:** versión funcional de una ronda disponible mediante la interfaz de consola.
 
 ## Objetivo
 
@@ -48,8 +48,7 @@ lo que los cambios en los módulos quedan disponibles sin reinstalar el paquete.
 
 ## Ejecución
 
-La interfaz CLI aún no está implementada. Cuando esté disponible, el punto de
-entrada previsto será:
+Ejecuta una ronda desde la interfaz de consola:
 
 ```powershell
 python -m piedra_papel_tijeras.main
@@ -100,6 +99,9 @@ piedra-papel-tijeras/
 |           `-- partida.py
 |-- tests/
 |   |-- README.md
+|   |-- test_main.py
+|   |-- services/
+|   |   `-- test_partida.py
 |   `-- models/
 |       |-- jugadas/
 |       |   |-- test_fabrica_jugadas.py
@@ -110,6 +112,7 @@ piedra-papel-tijeras/
 |       |-- jugadores/
 |       |   |-- test_jugador_humano.py
 |       |   `-- test_jugador_maquina.py
+|       |-- test_resultado.py
 |       `-- test_tipo_jugada.py
 |-- docs/
 |   |-- guia_pyproject_toml.md
@@ -125,10 +128,9 @@ Los archivos y subdirectorios utilizan `snake_case`, salvo el directorio raíz d
 
 ### Estado de la arquitectura
 
-Actualmente están implementados `TipoJugada`, la jerarquía de jugadas, su
-fábrica, `Jugador`, `JugadorHumano` y `JugadorMaquina`. `Resultado`, la
-coordinación de `Partida` y la interfaz de consola forman parte del diseño
-previsto y se implementarán en fases posteriores.
+Actualmente están implementados `TipoJugada`, `Resultado`, la jerarquía de
+jugadas, su fábrica, los jugadores, la coordinación de `Partida` y la interfaz
+de consola para ejecutar una ronda.
 
 ## Modelos de jugada
 
@@ -157,8 +159,8 @@ implementaciones:
 Ambos jugadores utilizarán `crear_jugada(tipo)` para obtener una instancia de
 `Jugada`, sin construir directamente `Piedra`, `Papel` o `Tijeras`.
 
-El servicio `Partida` coordinará las jugadas, realizará la comparación y devolverá
-un valor de `Resultado`: `VICTORIA`, `DERROTA` o `EMPATE`.
+El servicio `Partida` coordina las jugadas, realiza la comparación y devuelve un
+valor de `Resultado`: `VICTORIA`, `DERROTA` o `EMPATE`.
 
 ```text
 main.py
