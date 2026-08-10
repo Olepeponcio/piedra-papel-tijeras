@@ -94,19 +94,23 @@ piedra-papel-tijeras/
 |       |       |-- __init__.py
 |       |       |-- jugador.py
 |       |       |-- jugador_humano.py
-|       |       `-- maquina.py
+|       |       `-- jugador_maquina.py
 |       `-- services/
 |           |-- __init__.py
 |           `-- partida.py
 |-- tests/
 |   |-- README.md
 |   `-- models/
-|       `-- jugadas/
-|           |-- test_fabrica_jugadas.py
-|           |-- test_jugada.py
-|           |-- test_papel.py
-|           |-- test_piedra.py
-|           `-- test_tijeras.py
+|       |-- jugadas/
+|       |   |-- test_fabrica_jugadas.py
+|       |   |-- test_jugada.py
+|       |   |-- test_papel.py
+|       |   |-- test_piedra.py
+|       |   `-- test_tijeras.py
+|       |-- jugadores/
+|       |   |-- test_jugador_humano.py
+|       |   `-- test_jugador_maquina.py
+|       `-- test_tipo_jugada.py
 |-- docs/
 |   |-- guia_pyproject_toml.md
 |   |-- diagrama_clases_piedra_papel_tijeras.svg
@@ -121,10 +125,10 @@ Los archivos y subdirectorios utilizan `snake_case`, salvo el directorio raíz d
 
 ### Estado de la arquitectura
 
-Actualmente están implementados `TipoJugada`, la jerarquía de jugadas y su
-fábrica. `Jugador`, `JugadorHumano`, `Maquina`, `Resultado`, la coordinación de
-`Partida` y la interfaz de consola forman parte del diseño previsto y se
-implementarán en fases posteriores.
+Actualmente están implementados `TipoJugada`, la jerarquía de jugadas, su
+fábrica, `Jugador`, `JugadorHumano` y `JugadorMaquina`. `Resultado`, la
+coordinación de `Partida` y la interfaz de consola forman parte del diseño
+previsto y se implementarán en fases posteriores.
 
 ## Modelos de jugada
 
@@ -144,11 +148,11 @@ TipoJugada.TIJERAS -> Tijeras()
 
 ## Jugadores, partida y resultado
 
-El paquete previsto `models/jugadores` agrupa la abstracción `Jugador` y sus dos
+El paquete `models/jugadores` agrupa la abstracción `Jugador` y sus dos
 implementaciones:
 
 - `JugadorHumano`: recibe una elección validada desde la interfaz de consola.
-- `Maquina`: selecciona un `TipoJugada` mediante un generador aleatorio.
+- `JugadorMaquina`: selecciona un `TipoJugada` mediante un generador aleatorio.
 
 Ambos jugadores utilizarán `crear_jugada(tipo)` para obtener una instancia de
 `Jugada`, sin construir directamente `Piedra`, `Papel` o `Tijeras`.
@@ -158,7 +162,7 @@ un valor de `Resultado`: `VICTORIA`, `DERROTA` o `EMPATE`.
 
 ```text
 main.py
-   -> JugadorHumano / Maquina
+   -> JugadorHumano / JugadorMaquina
    -> crear_jugada(TipoJugada)
    -> Jugada
    -> Partida

@@ -16,6 +16,7 @@ que sus pruebas se incorporarán cuando esos componentes estén disponibles.
 | `models/jugadas/test_papel.py`            | Comportamiento específico de `Papel`.               |
 | `models/jugadas/test_tijeras.py`          | Comportamiento específico de `Tijeras`.             |
 | `models/jugadores/test_jugador_humano.py` | Selección y creación de jugadas del jugador humano. |
+| `models/jugadores/test_jugador_maquina.py` | Selección aleatoria de jugadas de la máquina.        |
 | `models/test_tipo_jugada.py`              | Valores y representación textual de `TipoJugada`.   |
 
 ## Convenciones generales
@@ -120,7 +121,17 @@ Estos casos corresponden a `test_piedra.py`, `test_papel.py` y
 - [x] `elegir_jugada()` devuelve la `Jugada` concreta correspondiente a la
       selección.
 
+### `test_jugador_maquina.py`
+
+- [x] Conserva el nombre predeterminado.
+- [x] Conserva un nombre personalizado.
+- [x] El método `__str__` devuelve la cadena correcta.
+- [x] `_seleccionar_tipo()` utiliza el generador inyectado.
+- [x] El generador recibe exclusivamente los miembros de `TipoJugada`.
+- [x] `elegir_jugada()` devuelve `Piedra`, `Papel` o `Tijeras` según el tipo
+      seleccionado.
+
 ## Componentes futuros
 
-Las pruebas de `Partida`, `JugadorMaquina` y la interfaz de consola quedan fuera
-de la batería actual porque esos componentes todavía no están implementados.
+Las pruebas de `Partida` y la interfaz de consola quedan fuera de la batería
+actual porque esos componentes todavía no están implementados.
