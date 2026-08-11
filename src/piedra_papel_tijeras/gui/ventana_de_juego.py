@@ -1,7 +1,7 @@
 from pathlib import Path
 
 from PySide6.QtCore import QSize, Qt
-from PySide6.QtGui import QIcon
+from PySide6.QtGui import QIcon, QPixmap
 from PySide6.QtWidgets import (
     QButtonGroup,
     QHBoxLayout,
@@ -15,6 +15,7 @@ from PySide6.QtWidgets import (
 from piedra_papel_tijeras.models.tipo_jugada import TipoJugada
 from piedra_papel_tijeras.models.jugadores.jugador_humano import JugadorHumano
 from piedra_papel_tijeras.services.partida import Partida
+from piedra_papel_tijeras.models.resultado_ronda import ResultadoDeLaRonda
 
 
 class VentanaDeJuego(QMainWindow):
@@ -74,6 +75,12 @@ class VentanaDeJuego(QMainWindow):
       }
   """
 
+    _ARCHIVOS_JUGADA: dict[TipoJugada, str] = {
+        TipoJugada.PIEDRA: "jugada_piedra.png",
+        TipoJugada.PAPEL: "jugada_papel.png",
+        TipoJugada.TIJERAS: "jugada_tijeras.png",
+    }
+
     def __init__(self, jugador_humano: JugadorHumano, partida: Partida) -> None:
         super().__init__()
 
@@ -83,6 +90,9 @@ class VentanaDeJuego(QMainWindow):
         # definir los objetos que interactuaran con los eventos
         self._jugador_humano = jugador_humano
         self._partida = partida
+
+        # variable para alberga estado de la ronda
+        self._resultado_ronda_actual: ResultadoDeLaRonda | None = None
 
         # configuracion nombre y tam de la ventana
         self.setWindowTitle("Piedra, papel o tijeras")
@@ -240,7 +250,7 @@ class VentanaDeJuego(QMainWindow):
             lambda checked=False: self._seleccionar_jugada(TipoJugada.TIJERAS)
         )
 
-        self.bo_btn.clicked.connect(self._ejecutar_ronda())
+        self.bo_btn.clicked.connect(self._ejecutar_ronda)
 
     def _configurar_estado_inicial(self) -> None:
         """prepara el entorno de juego"""
@@ -253,18 +263,41 @@ class VentanaDeJuego(QMainWindow):
         # configurar boton bo!
         self.bo_btn.setEnabled(False)
 
-    def _seleccionar_y_mostrar_imagen(self, jugada: str) -> None:
-        """selecciona la imagen según evento y muestra el objeto oculto"""
-        pass
+    def _mostrar_jugada(
+        self,
+        tipo_jugada: TipoJugada,
+        contenedor: QLabel,
+    ) -> None:
+        nombre_archivo = self._ARCHIVOS_JUGADA[tipo_jugada]
+        ruta_imagen = self._directorio_recursos / nombre_archivo
 
-    def _ejecutar_ronda(self) -> None:
-        self._resultado_ronda_actual = self._partida.jugar()
-        # Validar que existe jugada humana
-        # desactivar botones
-        # solicitar ronda a Partida
-        # mostrar jugada humana
-        # mostrar jugada maquina
-        # Programar presentacion resultado
+        imagen = QPixmap(str(ruta_imagen))
+
+        if imagen.isNull():
+            raise FileNotFoundError(f"No se pudo cargar la imagen: {ruta_imagen}")
+
+        # ajustar imagen. escalar imagen. cambiar tamaño imagen.
+        imagen_ajustada = imagen.scaled(
+            contenedor.size(),
+            Qt.AspectRatioMode.KeepAspectRatio,
+            Qt.TransformationMode.SmoothTransformation,
+        )
+
+        contenedor.setPixmap(imagen_ajustada)
+
+
+def _ejecutar_ronda(self) -> None:
+    self._resultado_ronda_actual = self._partida.jugar()
+
+    self._mostrar_jugada(
+        self._resultado_ronda_actual.jugada_humana.tipo,
+        self._imagen_jugador_humano,
+    )
+
+    self._mostrar_jugada(
+        self._resultado_ronda_actual.jugada_maquina.tipo,
+        self._imagen_jugador_maquina,
+    )
 
     def _seleccionar_jugada(self, tipo_jugada: TipoJugada) -> None:
         """Asigna valor al atributo y activa el botón bo!"""

@@ -40,8 +40,8 @@ def main_PySide6() -> None:
     # crear el objeto partida
     partida = Partida(jugador_humano, jugador_maquina)
 
-    # crear la ventana
-    # ventana = VentanaDeJuego(jugador_humano = jugador_humano, partida= partida)
+    # crear la ventana. el objeto maneja la selección de jugada del atributo jugador_humano
+    ventana = VentanaDeJuego(jugador_humano, partida)
 
 
 def main() -> None:
