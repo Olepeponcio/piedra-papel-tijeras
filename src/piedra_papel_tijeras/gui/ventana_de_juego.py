@@ -76,7 +76,10 @@ class VentanaDeJuego(QMainWindow):
           color: #858585;
       }
   """
-
+    COLOR_FONDO = """
+    background-color: #2b2b2b;
+    
+    """
     _ARCHIVOS_JUGADA: ClassVar[dict[TipoJugada, str]] = {
         TipoJugada.PIEDRA: "jugada_piedra.png",
         TipoJugada.PAPEL: "jugada_papel.png",
@@ -267,6 +270,10 @@ class VentanaDeJuego(QMainWindow):
         self._imagen_jugador_humano.clear()
         self._imagen_jugador_maquina.clear()
         self._imagen_resultado_jugada.clear()
+
+        # aplicar color de relleno al Widget
+        self._imagen_jugador_maquina.setStyleSheet(self.COLOR_FONDO)
+        self._imagen_jugador_humano.setStyleSheet(self.COLOR_FONDO)
 
         # configurar boton bo!
         self.bo_btn.setEnabled(False)

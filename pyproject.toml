@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "piedra-papel-tijeras"
-version = "0.0.1"
+version = "2.0.0"
 description = "Aplicación de consola para jugar a piedra, papel o tijeras"
 readme = "README.md"
 requires-python = ">=3.14"
@@ -15,15 +15,18 @@ keywords = [
     "cli",
     "juego",
     "piedra-papel-tijeras",
+    "gui",
+    "pyside6",
 ]
 
 classifiers = [
-    "Development Status :: 2 - Pre-Alpha",
-    "Environment :: Console",
+    "Development Status :: 3 - Alpha",
+    "Environment :: Win32 (MS Windows)",
+    "Intended Audience :: End Users/Desktop",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
     "Programming Language :: Python :: 3.14",
-    "Operating System :: OS Independent",
+    "Operating System :: Microsoft :: Windows",
     "Typing :: Typed",
 ]
 
