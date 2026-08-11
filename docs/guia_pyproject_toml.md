@@ -2,45 +2,62 @@
 
 ## 1. Finalidad
 
-`pyproject.toml` es el archivo estándar de configuración de un proyecto Python.
+`pyproject.toml` es el archivo estándar que describe cómo se construye, instala,
+ejecuta y verifica el proyecto Python.
 
-Permite centralizar:
+En este repositorio centraliza:
 
-- Los metadatos del proyecto.
+- El sistema de construcción.
+- Los metadatos y la versión del programa.
 - La versión mínima de Python.
 - Las dependencias de ejecución y desarrollo.
-- El sistema de construcción.
-- La ubicación de los paquetes.
+- La ubicación del paquete dentro de `src`.
+- El comando de inicio de la aplicación.
+- Los recursos gráficos incluidos en el paquete.
 - La configuración de pytest, Ruff y mypy.
-- Los futuros comandos de consola.
 
-En este proyecto también permite que Python encuentre correctamente el paquete:
+## 2. Evolución de la configuración
+
+El proyecto comenzó con una estructura mínima y un `requirements.txt`. A medida
+que crecieron el dominio y las pruebas, aparecieron problemas para importar el
+paquete situado dentro de `src`.
+
+Durante el desarrollo se utilizaron soluciones temporales mediante
+`PYTHONPATH`. La solución estable fue convertir el repositorio en un proyecto
+instalable mediante `pyproject.toml` y registrarlo en el entorno virtual en modo
+editable.
+
+La evolución fue:
 
 ```text
-src/
-└── piedra_papel_tijeras/
+requirements.txt inicial
+→ problemas de imports desde src
+→ PYTHONPATH temporal
+→ creación de pyproject.toml
+→ instalación editable
+→ grupo opcional dev
+→ incorporación de PySide6
+→ comando ejecutable
+→ declaración de recursos PNG
+→ retirada de requirements.txt
 ```
 
-De esta forma, los módulos pueden importarse mediante:
+## 3. Ubicación
 
-```python
-from piedra_papel_tijeras.models import ...
-```
-
-## 2. Ubicación
-
-El archivo debe estar en la raíz del repositorio:
+El archivo se encuentra en la raíz:
 
 ```text
 python--piedra-papel-tijeras/
 ├── pyproject.toml
 ├── README.md
-├── requirements.txt
 ├── src/
-└── tests/
+├── tests/
+└── docs/
 ```
 
-## 3. Plantilla adaptada al proyecto
+## 4. Configuración adaptada a la versión gráfica
+
+La configuración debe representar el estado de la aplicación PySide6:
 
 ```toml
 [build-system]
@@ -49,41 +66,51 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "piedra-papel-tijeras"
-version = "0.0.1"
-description = "Aplicación de consola para jugar a piedra, papel o tijeras"
+version = "2.0.0"
+description = "Aplicación gráfica de escritorio para jugar a piedra, papel o tijeras"
 readme = "README.md"
 requires-python = ">=3.14"
 
 keywords = [
     "python",
-    "cli",
+    "gui",
     "juego",
+    "pyside6",
     "piedra-papel-tijeras",
 ]
 
 classifiers = [
-    "Development Status :: 2 - Pre-Alpha",
-    "Environment :: Console",
+    "Development Status :: 3 - Alpha",
+    "Environment :: Win32 (MS Windows)",
+    "Intended Audience :: End Users/Desktop",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
     "Programming Language :: Python :: 3.14",
-    "Operating System :: OS Independent",
-    "Typing :: Typed",
+    "Operating System :: Microsoft :: Windows",
 ]
 
-dependencies = []
+dependencies = [
+    "PySide6==6.11.1",
+]
 
 [project.optional-dependencies]
 dev = [
+    "mypy==2.3.0",
+    "pyinstaller==6.22.0",
     "pytest==9.1.1",
     "ruff==0.16.1",
-    "mypy==2.3.0",
 ]
+
+[project.scripts]
+piedra-papel-tijeras = "piedra_papel_tijeras.main:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
 include = ["piedra_papel_tijeras*"]
 namespaces = false
+
+[tool.setuptools.package-data]
+piedra_papel_tijeras = ["resources/*.png"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -102,7 +129,10 @@ strict = true
 mypy_path = "src"
 ```
 
-## 4. Sistema de construcción
+Este bloque documenta la configuración objetivo de la versión gráfica. Los
+cambios sobre el archivo real deben revisarse y autorizarse de forma separada.
+
+## 5. Sistema de construcción
 
 ```toml
 [build-system]
@@ -110,73 +140,68 @@ requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 ```
 
-Esta sección indica que el proyecto será construido e instalado mediante
-`setuptools`.
+`setuptools` se encarga de descubrir, construir e instalar el paquete.
 
-- `requires`: herramientas necesarias para construir el paquete.
-- `build-backend`: componente encargado de realizar la construcción.
+## 6. Metadatos y nombres
 
-## 5. Metadatos del proyecto
-
-```toml
-[project]
-name = "piedra-papel-tijeras"
-version = "0.0.1"
-description = "Aplicación de consola para jugar a piedra, papel o tijeras"
-readme = "README.md"
-requires-python = ">=3.14"
-```
-
-- `name`: nombre utilizado por las herramientas de instalación.
-- `version`: versión actual del proyecto.
-- `description`: descripción breve.
-- `readme`: documento principal del proyecto.
-- `requires-python`: versiones de Python admitidas.
-
-El nombre de distribución puede contener guiones:
+El nombre de distribución puede utilizar guiones:
 
 ```text
 piedra-papel-tijeras
 ```
 
-El paquete utilizado en los imports conserva guiones bajos:
+El paquete importable conserva guiones bajos:
 
 ```python
 import piedra_papel_tijeras
 ```
 
-## 6. Dependencias de ejecución
+Son identificadores relacionados, pero cumplen funciones distintas:
 
-```toml
-dependencies = []
+```text
+piedra-papel-tijeras → distribución y comando
+piedra_papel_tijeras → paquete de Python
 ```
 
-Aquí se declaran únicamente las bibliotecas necesarias para ejecutar la
-aplicación. Actualmente, el proyecto utiliza la biblioteca estándar de Python.
-
-Ejemplo futuro:
+## 7. Dependencias de ejecución
 
 ```toml
 dependencies = [
-    "nombre-paquete>=1.0",
+    "PySide6==6.11.1",
 ]
 ```
 
-## 7. Dependencias de desarrollo
+PySide6 es una dependencia de ejecución porque `main.py` y
+`ventana_de_juego.py` la importan para iniciar y representar la interfaz.
+
+Una instalación normal debe obtenerla automáticamente:
+
+```powershell
+python -m pip install .
+```
+
+## 8. Dependencias de desarrollo
 
 ```toml
 [project.optional-dependencies]
 dev = [
+    "mypy==2.3.0",
+    "pyinstaller==6.22.0",
     "pytest==9.1.1",
     "ruff==0.16.1",
-    "mypy==2.3.0",
 ]
 ```
 
-El grupo `dev` contiene herramientas necesarias durante el desarrollo, pero no
-para ejecutar la aplicación.
+Estas herramientas no son necesarias para ejecutar la aplicación:
 
-Su instalación se solicita mediante:
+```text
+pytest      → pruebas automatizadas
+Ruff        → análisis estático y convenciones
+mypy        → comprobación de tipos
+PyInstaller → construcción del ejecutable
+```
+
+Se instalan mediante:
 
 ```powershell
 python -m pip install -e ".[dev]"
@@ -186,11 +211,63 @@ Interpretación:
 
 ```text
 .       → proyecto situado en el directorio actual
-[dev]   → grupo opcional de dependencias de desarrollo
+[dev]   → grupo opcional de desarrollo
 -e      → instalación editable
 ```
 
-## 8. Descubrimiento del paquete
+## 9. Instalación editable
+
+La instalación editable registra el proyecto dentro del entorno virtual, pero
+mantiene el código fuente en `src`. Los cambios realizados en los módulos se
+reflejan sin reinstalar el paquete.
+
+Debe repetirse cuando cambien:
+
+- Las dependencias.
+- Los grupos opcionales.
+- Los comandos ejecutables.
+- El sistema de construcción.
+- Los datos incluidos en el paquete.
+
+```powershell
+python -m pip install -e ".[dev]"
+```
+
+## 10. Por qué aparece el proyecto en `pip list`
+
+Después de instalarlo en modo editable, `pip list` muestra una entrada similar
+a esta:
+
+```text
+Package                 Version  Editable project location
+piedra-papel-tijeras    2.0.0    C:\ruta\del\proyecto
+```
+
+No es una dependencia externa ni una copia del repositorio. Es el paquete local
+registrado en el entorno y enlazado con su código fuente.
+
+## 11. Retirada de `requirements.txt`
+
+`requirements.txt` se utilizó durante las primeras etapas. Posteriormente quedó
+redundante porque las dependencias pasaron a estar centralizadas en
+`pyproject.toml`.
+
+Instalación de la aplicación:
+
+```powershell
+python -m pip install .
+```
+
+Instalación para desarrollar:
+
+```powershell
+python -m pip install -e ".[dev]"
+```
+
+Las dependencias transitivas de PySide6, pytest, Ruff, mypy y PyInstaller se
+resuelven automáticamente y no deben copiarse manualmente a otro archivo.
+
+## 12. Descubrimiento del paquete
 
 ```toml
 [tool.setuptools.packages.find]
@@ -199,17 +276,62 @@ include = ["piedra_papel_tijeras*"]
 namespaces = false
 ```
 
-Esta sección indica que los paquetes se encuentran dentro de `src`. El patrón
-incluye el paquete principal y sus subpaquetes:
+La configuración descubre el paquete principal y sus subpaquetes:
 
 ```text
 piedra_papel_tijeras
-piedra_papel_tijeras.models
-piedra_papel_tijeras.models.jugadas
-piedra_papel_tijeras.services
+├── gui
+├── models
+│   ├── jugadas
+│   └── jugadores
+└── services
 ```
 
-## 9. Configuración de pytest
+El directorio `src` es un contenedor de código, no el nombre del paquete.
+
+## 13. Recursos gráficos
+
+Los PNG no son módulos Python. Deben declararse como datos del paquete:
+
+```toml
+[tool.setuptools.package-data]
+piedra_papel_tijeras = ["resources/*.png"]
+```
+
+Esto permite incluir:
+
+```text
+resources/
+├── btn_*.png
+├── jugada_*.png
+└── resultado_*.png
+```
+
+Sin esta declaración, una distribución construida podría instalar el código sin
+las imágenes necesarias para la interfaz.
+
+## 14. Comando ejecutable
+
+```toml
+[project.scripts]
+piedra-papel-tijeras = "piedra_papel_tijeras.main:main"
+```
+
+Después de instalar o reinstalar el proyecto:
+
+```powershell
+piedra-papel-tijeras
+```
+
+invoca la función `main()` del módulo `piedra_papel_tijeras.main`.
+
+También puede utilizarse:
+
+```powershell
+python -m piedra_papel_tijeras.main
+```
+
+## 15. Configuración de pytest
 
 ```toml
 [tool.pytest.ini_options]
@@ -219,24 +341,17 @@ pythonpath = ["src"]
 addopts = "-ra"
 ```
 
-- `testpaths`: directorios donde pytest buscará pruebas.
-- `python_files`: patrón utilizado para identificar módulos de pruebas.
-- `pythonpath`: incorpora `src` a la ruta de importación durante las pruebas.
-- `addopts`: opciones aplicadas automáticamente en cada ejecución.
-
-Ejecutar todas las pruebas:
+- `testpaths`: limita la búsqueda al directorio de pruebas.
+- `python_files`: define el patrón de módulos de prueba.
+- `pythonpath`: incorpora `src` durante la ejecución de pytest.
+- `addopts`: muestra un resumen adicional de resultados.
 
 ```powershell
 pytest
-```
-
-Ejecutar una prueba concreta:
-
-```powershell
 pytest tests/models/jugadas/test_jugada.py
 ```
 
-## 10. Configuración de Ruff
+## 16. Configuración de Ruff
 
 ```toml
 [tool.ruff]
@@ -245,13 +360,11 @@ line-length = 88
 src = ["src", "tests"]
 ```
 
-Ruff comprueba el estilo y determinados errores estáticos:
-
 ```powershell
 ruff check .
 ```
 
-## 11. Configuración de mypy
+## 17. Configuración de mypy
 
 ```toml
 [tool.mypy]
@@ -260,58 +373,34 @@ strict = true
 mypy_path = "src"
 ```
 
-mypy comprueba las anotaciones de tipos:
-
 ```powershell
 mypy src
 ```
 
-El modo estricto puede revelar errores adicionales a medida que crezca el
-proyecto.
+El modo estricto comprueba tanto anotaciones ausentes como usos incompatibles
+de los tipos declarados.
 
-## 12. Preparación del entorno virtual
+## 18. Preparación del entorno virtual
 
-Crear el entorno:
+Crear y activar el entorno en Windows PowerShell:
 
 ```powershell
 python -m venv .venv
-```
-
-Activarlo:
-
-```powershell
 .\.venv\Scripts\Activate.ps1
 ```
 
-Instalar el proyecto y las herramientas de desarrollo:
+Instalar el proyecto:
 
 ```powershell
 python -m pip install -e ".[dev]"
 ```
 
-No deben editarse manualmente los archivos internos de `.venv`.
+No deben editarse ni copiarse manualmente los archivos internos de `.venv`. El
+entorno debe poder reconstruirse a partir de `pyproject.toml`.
 
-## 13. Instalación editable
+## 19. Verificación
 
-La opción `-e` registra el proyecto dentro de `.venv`, manteniendo el código
-fuente en `src`. Los cambios realizados en los módulos estarán disponibles sin
-reinstalar el proyecto.
-
-Debe repetirse la instalación cuando cambien:
-
-- Las dependencias.
-- Los grupos opcionales.
-- Los comandos de consola.
-- El sistema de construcción.
-- Determinados metadatos del proyecto.
-
-```powershell
-python -m pip install -e ".[dev]"
-```
-
-## 14. Verificación
-
-Comprobar el intérprete:
+Comprobar el intérprete activo:
 
 ```powershell
 python -c "import sys; print(sys.executable)"
@@ -323,19 +412,19 @@ Debe apuntar a:
 .venv\Scripts\python.exe
 ```
 
-Comprobar el paquete:
+Comprobar la instalación del paquete:
 
 ```powershell
 python -c "import piedra_papel_tijeras; print(piedra_papel_tijeras.__file__)"
 ```
 
-Debe apuntar a:
+Comprobar el registro editable y las dependencias:
 
-```text
-src\piedra_papel_tijeras\__init__.py
+```powershell
+python -m pip list
 ```
 
-Ejecutar las comprobaciones:
+Ejecutar las comprobaciones del proyecto:
 
 ```powershell
 pytest
@@ -343,106 +432,107 @@ ruff check .
 mypy src
 ```
 
-## 15. Actualización de versiones
+## 20. Evolución versionada
 
-No es necesario modificar la versión por cada cambio o commit.
+La versión de `pyproject.toml` identifica el paquete instalado. Una etiqueta Git
+identifica una versión concreta publicada en el historial del repositorio.
 
-Ejemplo de evolución:
+La evolución principal es:
 
 ```text
-0.0.1 → estructura y modelos iniciales
-0.1.0 → primera versión funcional
-0.2.0 → incorporación de nuevas funcionalidades
-0.2.1 → corrección compatible
-1.0.0 → primera versión estable
+0.x     → construcción y consolidación del dominio
+1.0.0   → primera aplicación CLI funcional
+2.0.0   → aplicación gráfica PySide6
 ```
 
-La versión debe actualizarse cuando se prepare una nueva entrega identificable.
+Actualmente `2.0.0` está declarada en `pyproject.toml`, pero todavía no existe
+la etiqueta Git `v2.0.0`.
 
-## 16. Futuro comando de consola
+Antes de publicar una versión deben sincronizarse:
 
-Cuando `main.py` defina una función ejecutable:
-
-```python
-def main() -> None:
-    ...
+```text
+pyproject.toml
+README.md
+documentación técnica
+etiqueta Git
 ```
 
-podrá añadirse:
+## 21. Criterio SemVer
 
-```toml
-[project.scripts]
-piedra-papel-tijeras = "piedra_papel_tijeras.main:main"
+```text
+MAYOR.MENOR.PARCHE
 ```
 
-Después de reinstalar:
+- `MAYOR`: cambios principales o incompatibles en el contrato de uso.
+- `MENOR`: funcionalidad compatible añadida.
+- `PARCHE`: correcciones y refinamientos compatibles.
 
-```powershell
-python -m pip install -e ".[dev]"
-```
+Antes de `1.0.0`, el proyecto se consideraba inestable. El salto a `1.0.0`
+identificó la primera aplicación completa por consola. El paso a `2.0.0`
+representa la sustitución de la interfaz principal por una GUI dirigida por
+eventos, conservando el dominio anterior.
 
-la aplicación podrá iniciarse con:
+## 22. Mantenimiento
 
-```powershell
-piedra-papel-tijeras
-```
+`pyproject.toml` no necesita cambiar con cada commit. Debe revisarse cuando
+cambien:
 
-## 17. Resolución de problemas
+| Cambio | Sección afectada |
+| --- | --- |
+| Nueva publicación | `project.version` |
+| Metadatos del programa | `project` |
+| Dependencia de ejecución | `project.dependencies` |
+| Herramienta de desarrollo | `project.optional-dependencies` |
+| Versiones admitidas de Python | `requires-python` |
+| Comando de inicio | `project.scripts` |
+| Estructura de paquetes | `tool.setuptools.packages.find` |
+| Recursos distribuidos | `tool.setuptools.package-data` |
+| Comportamiento de pruebas | `tool.pytest` |
+| Reglas de análisis | `tool.ruff` o `tool.mypy` |
 
-### No se encuentra `piedra_papel_tijeras`
+## 23. Resolución de problemas
+
+### No se encuentra el paquete
 
 ```text
 ModuleNotFoundError: No module named 'piedra_papel_tijeras'
 ```
 
-Reinstalar el proyecto:
+Activar el entorno y reinstalar:
 
 ```powershell
+.\.venv\Scripts\Activate.ps1
 python -m pip install -e ".[dev]"
 ```
 
 ### No se reconoce pytest
 
-Activar `.venv`:
-
-```powershell
-.\.venv\Scripts\Activate.ps1
-```
-
-Ejecutar pytest mediante Python:
-
 ```powershell
 python -m pytest
 ```
 
+Si el módulo no existe, comprobar que se instaló el grupo `dev`.
+
 ### VS Code subraya los imports
 
-Seleccionar el intérprete:
+Seleccionar el intérprete del entorno:
 
 ```text
 Python: Select Interpreter
 → .venv\Scripts\python.exe
 ```
 
-Después, reiniciar el servidor de lenguaje de Python.
+Después, reiniciar el servidor de lenguaje.
 
-## 18. Mantenimiento de `pyproject.toml`
+### Cambió `pyproject.toml`, pero el entorno conserva la configuración anterior
 
-El archivo no se modifica con cada cambio de código. Debe actualizarse cuando
-cambien:
+Repetir la instalación editable:
 
-| Cambio | Sección afectada |
-| --- | --- |
-| Nueva publicación | `project.version` |
-| Nueva dependencia de ejecución | `project.dependencies` |
-| Nueva herramienta de desarrollo | `project.optional-dependencies` |
-| Versiones de Python admitidas | `requires-python` |
-| Nuevo comando de consola | `project.scripts` |
-| Estructura de paquetes | `tool.setuptools` |
-| Comportamiento de las pruebas | `tool.pytest` |
-| Reglas de análisis | `tool.ruff` o `tool.mypy` |
+```powershell
+python -m pip install -e ".[dev]"
+```
 
-## 19. Referencias
+## 24. Referencias
 
 - [Python Packaging User Guide](https://packaging.python.org/en/latest/guides/writing-pyproject-toml/)
 - [Configuración de setuptools](https://setuptools.pypa.io/en/latest/userguide/pyproject_config.html)
