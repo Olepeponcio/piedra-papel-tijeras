@@ -9,7 +9,8 @@ class JugadorHumano(Jugador):
 
     def __init__(
         self,
-        nombre: str,
+        nombre="Jugador",
+        *,
         selector_tipo: Callable[[], TipoJugada],
     ) -> None:
         super().__init__(nombre)

@@ -2,7 +2,8 @@
 
 Aplicación de consola desarrollada en Python para jugar a piedra, papel o tijeras contra el programa.
 
-> **Estado:** versión funcional de una ronda disponible mediante la interfaz de consola.
+> **Estado:** versión `v1.0.0` funcional mediante la interfaz de consola y
+> distribuible como ejecutable para Windows.
 
 ## Objetivo
 
@@ -66,6 +67,35 @@ mypy src
 
 La configuración de estas herramientas se centraliza en `pyproject.toml`. No es
 necesario establecer `PYTHONPATH` manualmente.
+
+## Generación del ejecutable
+
+El ejecutable para Windows se genera con PyInstaller. Con el entorno virtual
+activo y las dependencias de desarrollo instaladas, ejecuta desde la raíz del
+proyecto:
+
+```powershell
+pyinstaller --clean --noconfirm main.spec
+```
+
+El archivo resultante se crea en:
+
+```text
+dist/main.exe
+```
+
+Durante la construcción, PyInstaller utiliza:
+
+- `main.spec`: configuración de entrada y opciones del ejecutable.
+- `build/`: archivos temporales de construcción.
+- `dist/`: resultado distribuible.
+
+`build/` puede eliminarse después de generar el ejecutable. Para comprobar el
+resultado, ejecuta:
+
+```powershell
+.\dist\main.exe
+```
 
 ## Arquitectura del proyecto
 
