@@ -30,24 +30,34 @@ def test_no_permite_elegir_jugada_sin_seleccion(jugador: JugadorHumano) -> None:
         jugador.elegir_jugada()
 
 
-def test_conserva_el_tipo_seleccionado(jugador: JugadorHumano) -> None:
-    jugador.seleccionar_tipo(TipoJugada.PAPEL)
+def test_devuelve_el_tipo_registrado(jugador: JugadorHumano) -> None:
+    jugador.registrar_seleccion(TipoJugada.PAPEL)
 
     assert jugador._seleccionar_tipo() is TipoJugada.PAPEL
 
 
 def test_rechaza_un_tipo_no_valido(jugador: JugadorHumano) -> None:
     with pytest.raises(TypeError, match="TipoJugada"):
-        jugador.seleccionar_tipo("Piedra")  # type: ignore[arg-type]
+        jugador.registrar_seleccion("Piedra")  # type: ignore[arg-type]
 
 
 def test_una_nueva_seleccion_sustituye_a_la_anterior(
     jugador: JugadorHumano,
 ) -> None:
-    jugador.seleccionar_tipo(TipoJugada.PIEDRA)
-    jugador.seleccionar_tipo(TipoJugada.TIJERAS)
+    jugador.registrar_seleccion(TipoJugada.PIEDRA)
+    jugador.registrar_seleccion(TipoJugada.TIJERAS)
 
     assert jugador._seleccionar_tipo() is TipoJugada.TIJERAS
+
+
+def test_consumir_la_seleccion_obliga_a_registrar_otra(
+    jugador: JugadorHumano,
+) -> None:
+    jugador.registrar_seleccion(TipoJugada.PIEDRA)
+    jugador.elegir_jugada()
+
+    with pytest.raises(RuntimeError, match="todavía no ha seleccionado"):
+        jugador.elegir_jugada()
 
 
 @pytest.mark.parametrize(
@@ -63,7 +73,7 @@ def test_elegir_jugada_devuelve_jugada_concreta_correspondiente(
     clase_esperada: type[Jugada],
 ) -> None:
     jugador = JugadorHumano("Ana")
-    jugador.seleccionar_tipo(tipo)
+    jugador.registrar_seleccion(tipo)
 
     resultado = jugador.elegir_jugada()
 

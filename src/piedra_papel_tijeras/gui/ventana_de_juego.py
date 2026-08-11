@@ -1,6 +1,7 @@
 from pathlib import Path
+from typing import ClassVar
 
-from PySide6.QtCore import QSize, Qt
+from PySide6.QtCore import QSize, Qt, QTimer
 from PySide6.QtGui import QIcon, QPixmap
 from PySide6.QtWidgets import (
     QButtonGroup,
@@ -12,10 +13,11 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from piedra_papel_tijeras.models.tipo_jugada import TipoJugada
 from piedra_papel_tijeras.models.jugadores.jugador_humano import JugadorHumano
-from piedra_papel_tijeras.services.partida import Partida
+from piedra_papel_tijeras.models.resultado import Resultado
 from piedra_papel_tijeras.models.resultado_ronda import ResultadoDeLaRonda
+from piedra_papel_tijeras.models.tipo_jugada import TipoJugada
+from piedra_papel_tijeras.services.partida import Partida
 
 
 class VentanaDeJuego(QMainWindow):
@@ -75,10 +77,16 @@ class VentanaDeJuego(QMainWindow):
       }
   """
 
-    _ARCHIVOS_JUGADA: dict[TipoJugada, str] = {
+    _ARCHIVOS_JUGADA: ClassVar[dict[TipoJugada, str]] = {
         TipoJugada.PIEDRA: "jugada_piedra.png",
         TipoJugada.PAPEL: "jugada_papel.png",
         TipoJugada.TIJERAS: "jugada_tijeras.png",
+    }
+
+    _ARCHIVOS_RESULTADO: ClassVar[dict[Resultado, str]] = {
+        Resultado.VICTORIA: "resultado_victoria.png",
+        Resultado.DERROTA: "resultado_derrota.png",
+        Resultado.EMPATE: "resultado_empate.png",
     }
 
     def __init__(self, jugador_humano: JugadorHumano, partida: Partida) -> None:
@@ -285,22 +293,96 @@ class VentanaDeJuego(QMainWindow):
 
         contenedor.setPixmap(imagen_ajustada)
 
+    def _mostrar_resultado(self) -> None:
+        """asigna valor de QPixmap la variable imagen carga la imagen usando la
+        ruta de _directorio_recursos / _ARCHIVOS_RESULTADO [value del diccionario],
+        escala la imagen al contenedor para configurar al atributo QPixmap de clase _imagen_resultado_jugada.
+        vuelve a liberar los botones de jugada
+        """
+        # si aún no ha habido ronda
+        if self._resultado_ronda_actual is None:
+            return
 
-def _ejecutar_ronda(self) -> None:
-    self._resultado_ronda_actual = self._partida.jugar()
+        # recuperamos el valor del objeto tipo ResultadoDeLaRonda
+        resultado = self._resultado_ronda_actual.resultado
 
-    self._mostrar_jugada(
-        self._resultado_ronda_actual.jugada_humana.tipo,
-        self._imagen_jugador_humano,
-    )
+        # asignamos como valor .value del diccionario
+        nombre_archivo = self._ARCHIVOS_RESULTADO[resultado]
 
-    self._mostrar_jugada(
-        self._resultado_ronda_actual.jugada_maquina.tipo,
-        self._imagen_jugador_maquina,
-    )
+        # recuperamos la ruta a resources desde variable interna
+        ruta_imagen = self._directorio_recursos / nombre_archivo
+
+        # creamos la imagen
+        imagen = QPixmap(str(ruta_imagen))
+
+        # comprobar que la variable del tipo no arroje error
+        if imagen.isNull():
+            raise FileNotFoundError(f"No se pudo cargar la imagen {ruta_imagen}")
+
+        imagen_ajustada = imagen.scaled(
+            self._imagen_resultado_jugada.size(),
+            Qt.AspectRatioMode.KeepAspectRatio,
+            Qt.TransformationMode.SmoothTransformation,
+        )
+
+        # asignar el valor de la configuración al atributo de clase del tipo QPixmap
+        self._imagen_resultado_jugada.setPixmap(imagen_ajustada)
+
+        # preparar los componentes para la siguiente ronda
+        self._preparar_seleccion_siguiente_ronda()
+
+    def _ejecutar_ronda(self) -> None:
+        """Asigna valor al atributo invocando el metodo jugar de partida. Muestra las jugadas de los actores y el resultado
+        con retardo invocando al metodo de clase _mostrar_jugada y _mostrar_resultado respectivamente
+        """
+        self._resultado_ronda_actual = self._partida.jugar()
+
+        self._mostrar_jugada(
+            self._resultado_ronda_actual.jugada_humana.tipo,
+            self._imagen_jugador_humano,
+        )
+
+        self._mostrar_jugada(
+            self._resultado_ronda_actual.jugada_maquina.tipo,
+            self._imagen_jugador_maquina,
+        )
+
+        # preparar el evento retardado para mostrar resultado
+        self._imagen_resultado_jugada.clear()
+
+        # desactivar temporalmente los botones
+        self.piedra_btn.setEnabled(False)
+        self.papel_btn.setEnabled(False)
+        self.tijeras_btn.setEnabled(False)
+        self.bo_btn.setEnabled(False)
+
+        # retardo de 1500 ms para invocar el metodo que renderiza el resultado
+        QTimer.singleShot(1500, self._mostrar_resultado)
 
     def _seleccionar_jugada(self, tipo_jugada: TipoJugada) -> None:
         """Asigna valor al atributo y activa el botón bo!"""
 
-        self._jugador_humano.seleccionar_tipo(tipo_jugada)
+        if self._resultado_ronda_actual is not None:
+            self._imagen_jugador_humano.clear()
+            self._imagen_jugador_maquina.clear()
+            self._imagen_resultado_jugada.clear()
+            self._resultado_ronda_actual = None
+
+        # selecciona
+        self._jugador_humano.registrar_seleccion(tipo_jugada)
         self.bo_btn.setEnabled(True)
+
+    def _preparar_seleccion_siguiente_ronda(self) -> None:
+        self.grupo_jugadas.setExclusive(False)
+
+        self.piedra_btn.setChecked(False)
+        self.papel_btn.setChecked(False)
+        self.tijeras_btn.setChecked(False)
+
+        self.grupo_jugadas.setExclusive(True)
+
+        self.piedra_btn.setEnabled(True)
+        self.papel_btn.setEnabled(True)
+        self.tijeras_btn.setEnabled(True)
+
+        self.bo_btn.setEnabled(False)

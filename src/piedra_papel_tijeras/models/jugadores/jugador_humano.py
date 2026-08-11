@@ -11,17 +11,20 @@ class JugadorHumano(Jugador):
 
         self._tipo_seleccionado: TipoJugada | None = None
 
-    def seleccionar_tipo(self, tipo: TipoJugada) -> None:
-        """Almacena el tipo seleccionado por la interfaz activa."""
+    def registrar_seleccion(self, tipo: TipoJugada) -> None:
+        """Registra temporalmente el tipo elegido por la interfaz activa."""
         if not isinstance(tipo, TipoJugada):
             raise TypeError("Tipo debe ser una instancia de TipoJugada")
 
         self._tipo_seleccionado = tipo
 
     def _seleccionar_tipo(self) -> TipoJugada:
+        """Consume y devuelve el tipo previamente registrado."""
         if self._tipo_seleccionado is None:
             raise RuntimeError("El jugador todavía no ha seleccionado una jugada")
 
-        return self._tipo_seleccionado
+        tipo_seleccionado = self._tipo_seleccionado
+        self._tipo_seleccionado = None
+        return tipo_seleccionado
 
     # hereda metodo elegir_jugada que usa _seleccionar_tipo

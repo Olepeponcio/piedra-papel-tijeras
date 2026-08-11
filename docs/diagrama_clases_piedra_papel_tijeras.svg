@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="1120" viewBox="0 0 1400 1120" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="1220" viewBox="0 0 1400 1220" role="img" aria-labelledby="title desc">
   <title id="title">Diagrama de clases de piedra, papel y tijeras</title>
-  <desc id="desc">Diagrama UML de las jugadas, su fábrica, sus tipos, los jugadores, la partida y el resultado.</desc>
+  <desc id="desc">Diagrama UML de las jugadas, su fábrica, la selección humana de un solo uso, los jugadores, la partida y el resultado de ronda.</desc>
   <defs>
     <style>
       text { font-family: Arial, sans-serif; fill: #172033; }
@@ -131,51 +131,67 @@
   </g>
 
   <g>
-    <rect class="box" x="35" y="930" width="280" height="85" rx="6"/>
-    <text class="name" x="175" y="962">JugadorHumano</text>
-    <line class="divider" x1="35" y1="976" x2="315" y2="976"/>
-    <text class="member" x="51" y="1001">+ elegir_jugada(): Jugada</text>
+    <rect class="box" x="35" y="900" width="360" height="165" rx="6"/>
+    <text class="name" x="215" y="932">JugadorHumano</text>
+    <line class="divider" x1="35" y1="946" x2="395" y2="946"/>
+    <text class="member" x="51" y="971">- _tipo_seleccionado: TipoJugada?</text>
+    <line class="divider" x1="35" y1="984" x2="395" y2="984"/>
+    <text class="member" x="51" y="1009">+ registrar_seleccion(tipo): None</text>
+    <text class="member" x="51" y="1034"># _seleccionar_tipo(): TipoJugada</text>
+    <text class="member" x="51" y="1059">+ elegir_jugada(): Jugada [heredado]</text>
   </g>
 
   <g>
-    <rect class="box" x="350" y="910" width="330" height="125" rx="6"/>
-    <text class="name" x="515" y="942">Maquina</text>
-    <line class="divider" x1="350" y1="956" x2="680" y2="956"/>
-    <text class="member" x="366" y="981">- generador_aleatorio</text>
-    <line class="divider" x1="350" y1="994" x2="680" y2="994"/>
-    <text class="member" x="366" y="1019">+ elegir_jugada(): Jugada</text>
+    <rect class="box" x="430" y="910" width="300" height="125" rx="6"/>
+    <text class="name" x="580" y="942">JugadorMaquina</text>
+    <line class="divider" x1="430" y1="956" x2="730" y2="956"/>
+    <text class="member" x="446" y="981">- _generador: Random</text>
+    <line class="divider" x1="430" y1="994" x2="730" y2="994"/>
+    <text class="member" x="446" y="1019"># _seleccionar_tipo(): TipoJugada</text>
   </g>
 
-  <path class="relation" marker-end="url(#inherit)" d="M175 930 V850 H215 V795"/>
-  <path class="relation" marker-end="url(#inherit)" d="M515 910 V850 H265 V795"/>
+  <path class="relation" marker-end="url(#inherit)" d="M215 900 V850 H215 V795"/>
+  <path class="relation" marker-end="url(#inherit)" d="M580 910 V850 H265 V795"/>
 
   <g>
     <rect class="box" x="805" y="665" width="520" height="180" rx="6"/>
     <text class="name" x="1065" y="697">Partida</text>
     <line class="divider" x1="805" y1="711" x2="1325" y2="711"/>
-    <text class="member" x="821" y="738">- jugador: Jugador</text>
-    <text class="member" x="821" y="763">- maquina: Maquina</text>
+    <text class="member" x="821" y="738">- _jugador_humano: Jugador</text>
+    <text class="member" x="821" y="763">- _jugador_maquina: Jugador</text>
     <line class="divider" x1="805" y1="777" x2="1325" y2="777"/>
-    <text class="member" x="821" y="803">+ jugar(): Resultado</text>
-    <text class="member" x="821" y="828">- determinar_resultado(a: Jugada, b: Jugada): Resultado</text>
+    <text class="member" x="821" y="803">+ jugar(): ResultadoDeLaRonda</text>
+    <text class="member" x="821" y="828">- calcula resultado desde la perspectiva humana</text>
   </g>
 
   <g>
-    <rect class="enum" x="880" y="925" width="370" height="150" rx="6"/>
-    <text class="stereotype" x="1065" y="949">&lt;&lt;enumeración&gt;&gt;</text>
-    <text class="name" x="1065" y="975">Resultado</text>
-    <line class="divider" x1="880" y1="988" x2="1250" y2="988"/>
-    <text class="member" x="900" y="1015">VICTORIA</text>
-    <text class="member" x="900" y="1040">DERROTA</text>
-    <text class="member" x="900" y="1065">EMPATE</text>
+    <rect class="box" x="805" y="890" width="520" height="135" rx="6"/>
+    <text class="stereotype" x="1065" y="914">&lt;&lt;dataclass inmutable&gt;&gt;</text>
+    <text class="name" x="1065" y="940">ResultadoDeLaRonda</text>
+    <line class="divider" x1="805" y1="953" x2="1325" y2="953"/>
+    <text class="member" x="821" y="978">+ jugada_humana: Jugada</text>
+    <text class="member" x="821" y="1003">+ jugada_maquina: Jugada</text>
+    <text class="member" x="1080" y="1003">+ resultado: Resultado</text>
+  </g>
+
+  <g>
+    <rect class="enum" x="880" y="1055" width="370" height="135" rx="6"/>
+    <text class="stereotype" x="1065" y="1079">&lt;&lt;enumeración&gt;&gt;</text>
+    <text class="name" x="1065" y="1105">Resultado</text>
+    <line class="divider" x1="880" y1="1118" x2="1250" y2="1118"/>
+    <text class="member" x="900" y="1143">VICTORIA</text>
+    <text class="member" x="1030" y="1143">DERROTA</text>
+    <text class="member" x="1155" y="1143">EMPATE</text>
   </g>
 
   <path class="relation" marker-end="url(#arrow)" d="M805 730 H400"/>
   <text class="label" x="602" y="719">utiliza</text>
-  <path class="relation" marker-end="url(#arrow)" d="M1065 845 V925"/>
-  <text class="label" x="1100" y="890">produce</text>
+  <path class="relation" marker-end="url(#arrow)" d="M1065 845 V890"/>
+  <text class="label" x="1120" y="875">produce</text>
+  <path class="relation" marker-end="url(#arrow)" d="M1065 1025 V1055"/>
+  <text class="label" x="1125" y="1045">contiene</text>
   <path class="relation" marker-end="url(#arrow)" d="M240 665 V605 H610 V530"/>
   <text class="label" x="425" y="594">elige Jugada</text>
 
-  <text class="footnote" x="700" y="1105">La fábrica centraliza la creación; Jugada y sus clases hijas conservan sus responsabilidades</text>
+  <text class="footnote" x="700" y="1210">La interfaz registra el tipo; Jugador lo consume una vez y la fábrica crea la Jugada concreta</text>
 </svg>

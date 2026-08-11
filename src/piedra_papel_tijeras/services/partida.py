@@ -1,5 +1,4 @@
 from piedra_papel_tijeras.models.jugadores.jugador import Jugador
-
 from piedra_papel_tijeras.models.resultado import Resultado
 from piedra_papel_tijeras.models.resultado_ronda import ResultadoDeLaRonda
 

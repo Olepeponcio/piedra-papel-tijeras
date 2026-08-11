@@ -2,7 +2,6 @@ import pytest
 
 from piedra_papel_tijeras.models.jugadores.jugador_humano import JugadorHumano
 from piedra_papel_tijeras.models.jugadores.jugador_maquina import JugadorMaquina
-
 from piedra_papel_tijeras.models.resultado import Resultado
 from piedra_papel_tijeras.models.resultado_ronda import ResultadoDeLaRonda
 from piedra_papel_tijeras.models.tipo_jugada import TipoJugada
@@ -23,7 +22,7 @@ def test_partida_devuelve_resultado_completo_de_la_ronda(
     resultado_esperado: Resultado,
 ) -> None:
     jugador_humano = JugadorHumano()
-    jugador_humano.seleccionar_tipo(tipo_humano)
+    jugador_humano.registrar_seleccion(tipo_humano)
 
     jugador_maquina = JugadorMaquina()
     jugador_maquina._seleccionar_tipo = (  # type: ignore[method-assign]

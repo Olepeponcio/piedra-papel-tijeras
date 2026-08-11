@@ -60,29 +60,52 @@ Ejecuta una ronda desde la interfaz de consola:
 python -m piedra_papel_tijeras.main
 ```
 
-La entrada `main()` mantiene temporalmente este flujo para que la migración no
-elimine una versión funcional. Internamente, la ejecución histórica está separada
-en `main_consola()`.
+La ejecución histórica permanece disponible mediante `main_consola()`. La entrada
+`main()` inicia actualmente la interfaz PySide6.
 
 ## Evolución hacia PySide6
 
 La nueva interfaz sustituye la lectura de la jugada mediante `input()` por eventos
-de botones. `JugadorHumano` conserva ahora el último `TipoJugada` seleccionado:
+de botones. `JugadorHumano` registra temporalmente un `TipoJugada` y lo consume al
+crear la siguiente jugada:
 
 ```text
 Consola o GUI
-    -> JugadorHumano.seleccionar_tipo(TipoJugada)
+    -> JugadorHumano.registrar_seleccion(TipoJugada)
     -> JugadorHumano.elegir_jugada()
+    -> JugadorHumano._seleccionar_tipo()
+    -> crear_jugada(TipoJugada)
     -> Partida.jugar()
 ```
 
 Este cambio elimina el selector basado en `lambda` del modelo. La consola solicita
-el tipo antes de guardarlo, mientras que la futura ventana lo asignará cuando el
-usuario pulse Piedra, Papel o Tijeras.
+el tipo antes de registrarlo y la ventana lo registra cuando el usuario pulsa
+Piedra, Papel o Tijeras. La selección es de un solo uso: después de construir la
+jugada concreta, debe registrarse otra para ejecutar una nueva ronda.
 
 La ventana en desarrollo se encuentra en
-`src/piedra_papel_tijeras/gui/ventana_de_juego.py`. Todavía no sustituye a la
-entrada principal de consola.
+`src/piedra_papel_tijeras/gui/ventana_de_juego.py` y constituye la entrada
+principal actual. La función `main_consola()` conserva el proceso previo.
+
+El proyecto conserva dos niveles de documentación visual:
+
+- [Flujo del dominio](docs/diagrama_flujo_piedra_papel_tijeras.svg): describe
+  las reglas del juego desde una elección hasta victoria, derrota o empate, sin
+  depender de una interfaz concreta.
+- [Flujo de la aplicación PySide6](docs/diagrama_flujo_aplicacion_pyside6.svg):
+  amplía el flujo con `main_pyside6()`, `VentanaDeJuego`, señales, fábrica,
+  `ResultadoDeLaRonda`, `QTimer` y preparación de la siguiente ronda.
+
+El flujo del dominio se mantiene estable y reutilizable. El flujo de aplicación
+se amplía conforme aparecen nuevas formas de interacción o coordinación.
+
+La misma separación se aplica a los diagramas de clases:
+
+- [Clases del dominio](docs/diagrama_clases_piedra_papel_tijeras.svg): documenta
+  jugadores, jugadas, fábrica, partida y objetos de resultado sin depender de Qt.
+- [Clases de la aplicación PySide6](docs/diagrama_clases_aplicacion_pyside6.svg):
+  añade `main_pyside6()`, `VentanaDeJuego`, controles Qt, inyección de dependencias
+  y las relaciones con el dominio reutilizable.
 
 ## Comprobaciones de desarrollo
 
@@ -184,7 +207,9 @@ piedra-papel-tijeras/
 |-- docs/
 |   |-- guia_pyproject_toml.md
 |   |-- diagrama_clases_piedra_papel_tijeras.svg
-|   `-- diagrama_flujo_piedra_papel_tijeras.svg
+|   |-- diagrama_clases_aplicacion_pyside6.svg
+|   |-- diagrama_flujo_piedra_papel_tijeras.svg
+|   `-- diagrama_flujo_aplicacion_pyside6.svg
 |-- AGENTS.md
 |-- pyproject.toml
 |-- README.md
@@ -221,31 +246,36 @@ TipoJugada.TIJERAS -> Tijeras()
 El paquete `models/jugadores` agrupa la abstracción `Jugador` y sus dos
 implementaciones:
 
-- `JugadorHumano`: conserva una elección validada recibida desde la interfaz
-  activa, ya sea consola o GUI.
+- `JugadorHumano`: registra una elección validada recibida desde la interfaz
+  activa y la consume al crear una única jugada.
 - `JugadorMaquina`: selecciona un `TipoJugada` mediante un generador aleatorio.
 
 Ambos jugadores utilizarán `crear_jugada(tipo)` para obtener una instancia de
 `Jugada`, sin construir directamente `Piedra`, `Papel` o `Tijeras`.
 
 El servicio `Partida` coordina las jugadas, realiza la comparación y devuelve un
-valor de `Resultado`: `VICTORIA`, `DERROTA` o `EMPATE`.
+`ResultadoDeLaRonda` con ambas jugadas y un `Resultado` desde la perspectiva
+humana: `VICTORIA`, `DERROTA` o `EMPATE`.
 
 ```text
 main.py
+   -> JugadorHumano.registrar_seleccion(TipoJugada)
    -> JugadorHumano / JugadorMaquina
+   -> Jugador.elegir_jugada()
    -> crear_jugada(TipoJugada)
    -> Jugada
    -> Partida
-   -> Resultado
+   -> ResultadoDeLaRonda
 ```
 
 ## Documentación
 
 - [Pruebas y calidad](tests/README.md)
 - [Guía de configuración de pyproject.toml](docs/guia_pyproject_toml.md)
-- [Diagrama de clases](docs/diagrama_clases_piedra_papel_tijeras.svg)
-- [Diagrama de flujo](docs/diagrama_flujo_piedra_papel_tijeras.svg)
+- [Diagrama de clases del dominio](docs/diagrama_clases_piedra_papel_tijeras.svg)
+- [Diagrama de clases de la aplicación PySide6](docs/diagrama_clases_aplicacion_pyside6.svg)
+- [Diagrama de flujo del dominio](docs/diagrama_flujo_piedra_papel_tijeras.svg)
+- [Diagrama de flujo de la aplicación PySide6](docs/diagrama_flujo_aplicacion_pyside6.svg)
 
 ## Tecnologías
 

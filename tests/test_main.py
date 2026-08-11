@@ -1,7 +1,6 @@
 import pytest
 
-from piedra_papel_tijeras.main import main_consola, solicitar_tipo
-from piedra_papel_tijeras.models.jugadores.jugador_maquina import JugadorMaquina
+from piedra_papel_tijeras.main import solicitar_tipo
 from piedra_papel_tijeras.models.tipo_jugada import TipoJugada
 
 

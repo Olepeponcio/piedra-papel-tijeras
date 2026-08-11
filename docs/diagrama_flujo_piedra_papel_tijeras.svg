@@ -19,10 +19,10 @@
   <text x="450" y="52">Inicio</text>
 
   <rect class="node" x="285" y="105" width="330" height="70" rx="10"/>
-  <text x="450" y="133"><tspan x="450">El jugador elige:</tspan><tspan x="450" dy="24">piedra, papel o tijeras</tspan></text>
+  <text x="450" y="133"><tspan x="450">La interfaz registra:</tspan><tspan x="450" dy="24">piedra, papel o tijeras</tspan></text>
 
   <rect class="node" x="285" y="220" width="330" height="60" rx="10"/>
-  <text x="450" y="257">La máquina elige al azar</text>
+  <text x="450" y="245"><tspan x="450">Partida solicita ambas jugadas:</tspan><tspan x="450" dy="22">humano consume; máquina sortea</tspan><tspan x="450" dy="22">y la fábrica crea cada Jugada</tspan></text>
 
   <polygon class="decision" points="450,325 600,390 450,455 300,390"/>
   <text x="450" y="385"><tspan x="450">¿Las elecciones</tspan><tspan x="450" dy="24">son iguales?</tspan></text>
