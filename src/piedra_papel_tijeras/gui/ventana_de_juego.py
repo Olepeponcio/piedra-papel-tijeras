@@ -12,6 +12,7 @@ from PySide6.QtWidgets import (
 
 from PySide6.QtCore import QSize
 from PySide6.QtGui import QIcon
+from PySide6.QtCore import Qt
 
 from piedra_papel_tijeras.models.tipo_jugada import TipoJugada
 
@@ -86,11 +87,6 @@ class VentanaDeJuego(QMainWindow):
         # jugada actual de la partida
         self._jugada_actual: TipoJugada | None = None
 
-        # imagenes permanecerán en el contenedor superpuestas y ocultas hasta evento
-        self.imagen_jugador_humano: QLabel | None = None
-        self.imagen_jugador_maquina: QLabel | None = None
-        self.imagen_resultado_jugada: QLabel | None = None
-
         # ejecutar la cascada de funciones
         self._crear_componentes()
         self._crear_layouts()
@@ -100,8 +96,8 @@ class VentanaDeJuego(QMainWindow):
     def _crear_componentes(self) -> None:
         """creacion de los distintos componentes"""
 
-        # declarar los botones, activar setCheckable
-        self.piedra_btn = QPushButton("Piedra")
+        # declarar los botones, configurarlos y aplicar estilo
+        self.piedra_btn = QPushButton()
         self.piedra_btn.setIcon(
             QIcon(str(self._directorio_recursos / "btn_piedra.png"))
         )
@@ -109,19 +105,23 @@ class VentanaDeJuego(QMainWindow):
         self.piedra_btn.setFixedSize(100, 100)
         self.piedra_btn.setCheckable(True)
 
-        self.papel_btn = QPushButton("Papel")
+        self.papel_btn = QPushButton()
         self.papel_btn.setIcon(QIcon(str(self._directorio_recursos / "btn_papel.png")))
         self.papel_btn.setIconSize(QSize(90, 90))
         self.papel_btn.setFixedSize(100, 100)
         self.papel_btn.setCheckable(True)
 
-        self.tijeras_btn = QPushButton("Tijeras")
+        self.tijeras_btn = QPushButton()
         self.tijeras_btn.setIcon(
             QIcon(str(self._directorio_recursos / "btn_tijeras.png"))
         )
         self.tijeras_btn.setIconSize(QSize(90, 90))
         self.tijeras_btn.setFixedSize(100, 100)
         self.tijeras_btn.setCheckable(True)
+
+        self.bo_btn = QPushButton("bo!")
+        self.bo_btn.setCheckable(False)
+        self.bo_btn.setFixedSize(100, 100)
 
         # definir estilo botones
         self.piedra_btn.setStyleSheet(self._ESTILO_BOTONES_JUGADA)
@@ -137,13 +137,10 @@ class VentanaDeJuego(QMainWindow):
         # definir que solo un boton del grupo esté activado
         self.grupo_jugadas.setExclusive(True)
 
-        self.bo_btn = QPushButton("bo!")
-        self.bo_btn.setCheckable(False)
-
         # crear los componentes para renderizar las imagenes
-        self.imagen_jugador_humano = QLabel()
-        self.imagen_jugador_maquina = QLabel()
-        self.imagen_resultado_jugada = QLabel()
+        self._imagen_jugador_humano = QLabel()
+        self._imagen_jugador_maquina = QLabel()
+        self._imagen_resultado_jugada = QLabel()
 
         # crear los labels para los nombres
         self.nombre_jugador_humano = QLabel("Jugador")
@@ -160,9 +157,9 @@ class VentanaDeJuego(QMainWindow):
         self.layout_principal = QVBoxLayout()
 
         # 3. Layouts secundarios
-        self.layout_jugador_humano = QHBoxLayout()
-        self.layout_jugador_maquina = QHBoxLayout()
-        self.layout_resultado_jugada = QHBoxLayout()
+        self.layout_jugador_humano = QVBoxLayout()
+        self.layout_jugador_maquina = QVBoxLayout()
+        self.layout_resultado_jugada = QVBoxLayout()
 
         # un layout que anide jugador_humano, jugador_maquina y resultado_jugada
         self.layout_jugadas = QHBoxLayout()
@@ -171,20 +168,43 @@ class VentanaDeJuego(QMainWindow):
         self.layout_boton_bo = QHBoxLayout()
 
         # 4. Añadir componentes a layouts secundarios
-        self.layout_botones_jugadas.addWidget(self.piedra_btn)
-        self.layout_botones_jugadas.addWidget(self.papel_btn)
-        self.layout_botones_jugadas.addWidget(self.tijeras_btn)
-        self.layout_boton_bo.addWidget(self.bo_btn)
+        self.layout_botones_jugadas.addWidget(
+            self.piedra_btn, alignment=Qt.AlignmentFlag.AlignCenter
+        )
+        self.layout_botones_jugadas.addWidget(
+            self.papel_btn, alignment=Qt.AlignmentFlag.AlignCenter
+        )
+        self.layout_botones_jugadas.addWidget(
+            self.tijeras_btn, alignment=Qt.AlignmentFlag.AlignCenter
+        )
+        self.layout_boton_bo.addWidget(
+            self.bo_btn, alignment=Qt.AlignmentFlag.AlignCenter
+        )
+
+        self.layout_jugador_humano.addWidget(
+            self.nombre_jugador_humano, alignment=Qt.AlignmentFlag.AlignCenter
+        )
+        self.layout_jugador_humano.addWidget(
+            self._imagen_jugador_humano, alignment=Qt.AlignmentFlag.AlignCenter
+        )
+
+        self.layout_jugador_maquina.addWidget(
+            self.nombre_jugador_maquina, alignment=Qt.AlignmentFlag.AlignCenter
+        )
+        self.layout_jugador_maquina.addWidget(
+            self._imagen_jugador_maquina, alignment=Qt.AlignmentFlag.AlignCenter
+        )
+
+        self.layout_resultado_jugada.addWidget(
+            self._imagen_resultado_jugada, alignment=Qt.AlignmentFlag.AlignCenter
+        )
 
         # 5. Anidar layouts
         self.layout_jugadas.addLayout(self.layout_jugador_humano)
-        self.layout_jugadas.addLayout(self.layout_jugador_maquina)
         self.layout_jugadas.addLayout(self.layout_resultado_jugada)
+        self.layout_jugadas.addLayout(self.layout_jugador_maquina)
 
-        # self.layout_principal.addLayout(self.layout_jugador_humano)
-        # self.layout_principal.addLayout(self.layout_jugador_maquina)
         self.layout_principal.addLayout(self.layout_jugadas)
-        # self.layout_principal.addLayout(self.layout_resultado_jugada)
         self.layout_principal.addLayout(self.layout_botones_jugadas)
         self.layout_principal.addLayout(self.layout_boton_bo)
 
@@ -212,13 +232,16 @@ class VentanaDeJuego(QMainWindow):
     def _configurar_estado_inicial(self) -> None:
         """prepara el entorno de juego"""
 
-        # ocultar imagenes
-        self.imagen_jugador_humano.hide()
+        # mantenter el contenedor vacio hasta que se asigne una imagen
+        self._imagen_jugador_humano.clear()
+        self._imagen_jugador_maquina.clear()
+        self._imagen_resultado_jugada.clear()
 
         # configurar boton bo!
         self.bo_btn.setEnabled(False)
 
-    def _mostrar_imagen(self, jugada: str) -> None:
+    def _seleccionar_y_mostrar_imagen(self, jugada: str) -> None:
+        """selecciona la imagen según evento y muestra el objeto oculto"""
         pass
 
     def _ejectuar_ronda(self) -> None:
