@@ -814,15 +814,15 @@ los metadatos alteran el hash. Cada archivo diferente necesita su propio hash.
 
 ## Dependencias
 
-- [ ] Dependencias inventariadas.
-- [ ] Vulnerabilidades auditadas.
-- [ ] Paquetes inesperados investigados.
-- [ ] Versiones registradas.
+- [x] Dependencias inventariadas.
+- [x] Vulnerabilidades auditadas.
+- [x] Paquetes inesperados investigados.
+- [x] Versiones registradas.
 
 ## Construcción
 
-- [ ] Commit identificado.
-- [ ] Entorno limpio.
+- [x] Commit identificado.
+- [x] Entorno limpio.
 - [ ] Pruebas, Ruff y Mypy superados.
 - [ ] Configuración `.spec` oficial.
 - [ ] Registro de construcción conservado.
