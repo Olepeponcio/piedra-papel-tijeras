@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "piedra-papel-tijeras"
 version = "2.0.0"
-description = "Aplicación de consola para jugar a piedra, papel o tijeras"
+description = "Aplicación con interfaz gráfica para jugar a Piedra, Papel o Tijeras"
 readme = "README.md"
 requires-python = ">=3.14"
 
@@ -27,11 +27,10 @@ classifiers = [
     "Programming Language :: Python :: 3 :: Only",
     "Programming Language :: Python :: 3.14",
     "Operating System :: Microsoft :: Windows",
-    "Typing :: Typed",
 ]
 
-# Actualmente, el programa solo utiliza la biblioteca estándar de Python.
-dependencies = []
+
+dependencies = ["PySide6==6.11.1",]
 
 
 [project.optional-dependencies]
@@ -43,11 +42,16 @@ dev = [
     "PySide6==6.11.1"
 ]
 
+[project.scripts]
+piedra-papel-tijeras = "piedra_papel_tijeras.main:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
 include = ["piedra_papel_tijeras*"]
 namespaces = false
+
+[tool.setuptools.package-data]
+piedra_papel_tijeras = ["resources/*.png"]
 
 
 [tool.pytest.ini_options]
