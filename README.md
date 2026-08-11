@@ -392,6 +392,7 @@ inyección de dependencias, temporización y representación gráfica del result
 
 - [Guía de configuración de pyproject.toml](docs/guia_pyproject_toml.md)
 - [Guía de pruebas](tests/README.md)
+- [Guía de cracion de ejecutables para correr la aplicación](docs/guia_ejecutables.md)
 
 ## Tecnologías
 
@@ -403,3 +404,9 @@ inyección de dependencias, temporización y representación gráfica del result
 - setuptools: construcción e instalación del paquete.
 - PyInstaller: generación del ejecutable de Windows.
 - Git y GitHub: versionado y publicación del código.
+
+## IMPORTANTE
+
+Si has curioseado mi repositorio y te apetece jugar un rato a Piedra, Papel o Tijeras, puedes descargar el archivo main.exe incluido en el directorio dist/; si bien documento la guia paso a paso para generar el ejecutable enlazado más arriba.
+
+Puede que tu antivirus detecte el ejecutable como no deseado
