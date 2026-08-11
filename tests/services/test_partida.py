@@ -2,7 +2,9 @@ import pytest
 
 from piedra_papel_tijeras.models.jugadores.jugador_humano import JugadorHumano
 from piedra_papel_tijeras.models.jugadores.jugador_maquina import JugadorMaquina
+
 from piedra_papel_tijeras.models.resultado import Resultado
+from piedra_papel_tijeras.models.resultado_ronda import ResultadoDeLaRonda
 from piedra_papel_tijeras.models.tipo_jugada import TipoJugada
 from piedra_papel_tijeras.services.partida import Partida
 
@@ -15,16 +17,27 @@ from piedra_papel_tijeras.services.partida import Partida
         (TipoJugada.PIEDRA, TipoJugada.PIEDRA, Resultado.EMPATE),
     ],
 )
-def test_partida_resuelve_resultado_desde_la_perspectiva_humana(
+def test_partida_devuelve_resultado_completo_de_la_ronda(
     tipo_humano: TipoJugada,
     tipo_maquina: TipoJugada,
     resultado_esperado: Resultado,
 ) -> None:
-    humano = JugadorHumano("Ana", lambda: tipo_humano)
-    maquina = JugadorMaquina()
-    maquina._seleccionar_tipo = lambda: tipo_maquina  # type: ignore[method-assign]
-    partida = Partida(humano, maquina)
+    jugador_humano = JugadorHumano()
+    jugador_humano.seleccionar_tipo(tipo_humano)
 
-    resultado = partida.jugar()
+    jugador_maquina = JugadorMaquina()
+    jugador_maquina._seleccionar_tipo = (  # type: ignore[method-assign]
+        lambda: tipo_maquina
+    )
 
-    assert resultado is resultado_esperado
+    partida = Partida(
+        jugador_humano=jugador_humano,
+        jugador_maquina=jugador_maquina,
+    )
+
+    resultado_ronda = partida.jugar()
+
+    assert isinstance(resultado_ronda, ResultadoDeLaRonda)
+    assert resultado_ronda.jugada_humana.tipo is tipo_humano
+    assert resultado_ronda.jugada_maquina.tipo is tipo_maquina
+    assert resultado_ronda.resultado is resultado_esperado

@@ -1,17 +1,22 @@
 # Piedra, papel o tijeras
 
-Aplicación de consola desarrollada en Python para jugar a piedra, papel o tijeras contra el programa.
+Aplicación desarrollada en Python para jugar a piedra, papel o tijeras contra el
+programa. La versión de consola permanece disponible mientras el proyecto escala
+hacia una interfaz gráfica de escritorio con PySide6.
 
-> **Estado:** versión `v1.0.0` funcional mediante la interfaz de consola y
-> distribuible como ejecutable para Windows.
+> **Estado:** versión `v1.0.0` de consola funcional y evolución gráfica con
+> PySide6 en desarrollo.
 
 ## Objetivo
 
-Construir una aplicación CLI sencilla y mantenible que permita al usuario elegir una jugada, generar la respuesta del programa y determinar el resultado de la ronda.
+Construir una aplicación mantenible que permita ejecutar el mismo dominio desde
+distintas interfaces. La consola constituye la primera interfaz funcional y
+PySide6 será la siguiente capa de presentación.
 
 ## Características previstas
 
 - Ejecución desde la línea de comandos.
+- Interfaz gráfica de escritorio con PySide6 en desarrollo.
 - Modelos independientes para piedra, papel y tijeras.
 - Creación centralizada de jugadas a partir de `TipoJugada`.
 - Lógica de partida separada de la interacción con el usuario.
@@ -47,13 +52,37 @@ python -m pip install -e ".[dev]"
 La instalación editable conecta el entorno virtual con el código de `src`, por
 lo que los cambios en los módulos quedan disponibles sin reinstalar el paquete.
 
-## Ejecución
+## Ejecución de la versión de consola
 
 Ejecuta una ronda desde la interfaz de consola:
 
 ```powershell
 python -m piedra_papel_tijeras.main
 ```
+
+La entrada `main()` mantiene temporalmente este flujo para que la migración no
+elimine una versión funcional. Internamente, la ejecución histórica está separada
+en `main_consola()`.
+
+## Evolución hacia PySide6
+
+La nueva interfaz sustituye la lectura de la jugada mediante `input()` por eventos
+de botones. `JugadorHumano` conserva ahora el último `TipoJugada` seleccionado:
+
+```text
+Consola o GUI
+    -> JugadorHumano.seleccionar_tipo(TipoJugada)
+    -> JugadorHumano.elegir_jugada()
+    -> Partida.jugar()
+```
+
+Este cambio elimina el selector basado en `lambda` del modelo. La consola solicita
+el tipo antes de guardarlo, mientras que la futura ventana lo asignará cuando el
+usuario pulse Piedra, Papel o Tijeras.
+
+La ventana en desarrollo se encuentra en
+`src/piedra_papel_tijeras/gui/ventana_de_juego.py`. Todavía no sustituye a la
+entrada principal de consola.
 
 ## Comprobaciones de desarrollo
 
@@ -108,6 +137,14 @@ piedra-papel-tijeras/
 |   `-- piedra_papel_tijeras/
 |       |-- __init__.py
 |       |-- main.py
+|       |-- gui/
+|       |   |-- __init__.py
+|       |   |-- ventana_de_juego.py
+|       |   `-- ventana_principal.py
+|       |-- resources/
+|       |   |-- btn_papel.png
+|       |   |-- btn_piedra.png
+|       |   `-- btn_tijeras.png
 |       |-- models/
 |       |   |-- __init__.py
 |       |   |-- tipo_jugada.py
@@ -160,7 +197,8 @@ Los archivos y subdirectorios utilizan `snake_case`, salvo el directorio raíz d
 
 Actualmente están implementados `TipoJugada`, `Resultado`, la jerarquía de
 jugadas, su fábrica, los jugadores, la coordinación de `Partida` y la interfaz
-de consola para ejecutar una ronda.
+de consola para ejecutar una ronda. La ventana PySide6 está en desarrollo y
+reutilizará el mismo dominio.
 
 ## Modelos de jugada
 
@@ -183,7 +221,8 @@ TipoJugada.TIJERAS -> Tijeras()
 El paquete `models/jugadores` agrupa la abstracción `Jugador` y sus dos
 implementaciones:
 
-- `JugadorHumano`: recibe una elección validada desde la interfaz de consola.
+- `JugadorHumano`: conserva una elección validada recibida desde la interfaz
+  activa, ya sea consola o GUI.
 - `JugadorMaquina`: selecciona un `TipoJugada` mediante un generador aleatorio.
 
 Ambos jugadores utilizarán `crear_jugada(tipo)` para obtener una instancia de
@@ -211,6 +250,7 @@ main.py
 ## Tecnologías
 
 - Python: lenguaje de programación.
+- PySide6: interfaz gráfica de escritorio en desarrollo.
 - pytest: pruebas automatizadas.
 - Ruff: análisis estático y formato.
 - mypy: comprobación estática de tipos.

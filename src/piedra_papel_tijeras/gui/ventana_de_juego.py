@@ -1,20 +1,20 @@
 from pathlib import Path
 
+from PySide6.QtCore import QSize, Qt
+from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import (
+    QButtonGroup,
+    QHBoxLayout,
     QLabel,
     QMainWindow,
     QPushButton,
     QVBoxLayout,
     QWidget,
-    QHBoxLayout,
-    QButtonGroup,
 )
 
-from PySide6.QtCore import QSize
-from PySide6.QtGui import QIcon
-from PySide6.QtCore import Qt
-
 from piedra_papel_tijeras.models.tipo_jugada import TipoJugada
+from piedra_papel_tijeras.models.jugadores.jugador_humano import JugadorHumano
+from piedra_papel_tijeras.services.partida import Partida
 
 
 class VentanaDeJuego(QMainWindow):
@@ -74,18 +74,19 @@ class VentanaDeJuego(QMainWindow):
       }
   """
 
-    def __init__(self) -> None:
+    def __init__(self, jugador_humano: JugadorHumano, partida: Partida) -> None:
         super().__init__()
 
         # definir el directorio de recursos
         self._directorio_recursos = Path(__file__).resolve().parents[1] / "resources"
 
+        # definir los objetos que interactuaran con los eventos
+        self._jugador_humano = jugador_humano
+        self._partida = partida
+
         # configuracion nombre y tam de la ventana
         self.setWindowTitle("Piedra, papel o tijeras")
         self.resize(600, 480)
-
-        # jugada actual de la partida
-        self._jugada_actual: TipoJugada | None = None
 
         # ejecutar la cascada de funciones
         self._crear_componentes()
@@ -141,6 +142,16 @@ class VentanaDeJuego(QMainWindow):
         self._imagen_jugador_humano = QLabel()
         self._imagen_jugador_maquina = QLabel()
         self._imagen_resultado_jugada = QLabel()
+
+        # definir tam por defecto del contenedor vacio
+        self._imagen_jugador_humano.setFixedSize(180, 180)
+        self._imagen_jugador_maquina.setFixedSize(180, 180)
+        self._imagen_resultado_jugada.setFixedSize(90, 90)
+
+        # centrar el contenido
+        self._imagen_jugador_humano.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self._imagen_jugador_maquina.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self._imagen_resultado_jugada.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         # crear los labels para los nombres
         self.nombre_jugador_humano = QLabel("Jugador")
@@ -219,15 +230,17 @@ class VentanaDeJuego(QMainWindow):
         # seleccion de jugada mediante boton
         # si btn jugada está presionado, y se pulsa btn bo! descubrir imagen correspondiente a tipoJugada
         self.piedra_btn.clicked.connect(
-            lambda: self._seleccion_jugada(TipoJugada.PIEDRA)
+            lambda: self._seleccionar_jugada(TipoJugada.PIEDRA)
         )
-        self.papel_btn.clicked.connect(lambda: self._seleccion_jugada(TipoJugada.PAPEL))
+        self.papel_btn.clicked.connect(
+            lambda checked=False: self._seleccionar_jugada(TipoJugada.PAPEL)
+        )
 
         self.tijeras_btn.clicked.connect(
-            lambda: self._seleccion_jugada(TipoJugada.TIJERAS)
+            lambda checked=False: self._seleccionar_jugada(TipoJugada.TIJERAS)
         )
 
-        self.bo_btn.clicked.connect(lambda: self._ejectuar_ronda())
+        self.bo_btn.clicked.connect(self._ejecutar_ronda())
 
     def _configurar_estado_inicial(self) -> None:
         """prepara el entorno de juego"""
@@ -244,17 +257,17 @@ class VentanaDeJuego(QMainWindow):
         """selecciona la imagen según evento y muestra el objeto oculto"""
         pass
 
-    def _ejectuar_ronda(self) -> None:
+    def _ejecutar_ronda(self) -> None:
+        self._resultado_ronda_actual = self._partida.jugar()
         # Validar que existe jugada humana
         # desactivar botones
         # solicitar ronda a Partida
         # mostrar jugada humana
         # mostrar jugada maquina
         # Programar presentacion resultado
-        pass
 
-    def _seleccion_jugada(self, tipo_jugada: TipoJugada) -> None:
+    def _seleccionar_jugada(self, tipo_jugada: TipoJugada) -> None:
         """Asigna valor al atributo y activa el botón bo!"""
 
-        self._jugada_actual = tipo_jugada
+        self._jugador_humano.seleccionar_tipo(tipo_jugada)
         self.bo_btn.setEnabled(True)

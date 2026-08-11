@@ -1,5 +1,3 @@
-from collections.abc import Callable
-
 import pytest
 
 from piedra_papel_tijeras.models.jugadas.jugada import Jugada
@@ -12,7 +10,7 @@ from piedra_papel_tijeras.models.tipo_jugada import TipoJugada
 
 @pytest.fixture
 def jugador() -> JugadorHumano:
-    return JugadorHumano("Ana", lambda: TipoJugada.PIEDRA)
+    return JugadorHumano("Ana")
 
 
 def test_conserva_el_nombre_al_construir_el_jugador(jugador: JugadorHumano) -> None:
@@ -23,20 +21,33 @@ def test_jugador_humano_devuelve_la_cadena_correcta(jugador: JugadorHumano) -> N
     assert str(jugador) == "Nombre: Ana"
 
 
-def test_seleccionar_tipo_utiliza_el_selector_inyectado() -> None:
-    llamadas = 0
+def test_utiliza_jugador_como_nombre_predeterminado() -> None:
+    assert JugadorHumano().nombre == "Jugador"
 
-    def selector() -> TipoJugada:
-        nonlocal llamadas
-        llamadas += 1
-        return TipoJugada.PAPEL
 
-    jugador = JugadorHumano("Ana", selector)
+def test_no_permite_elegir_jugada_sin_seleccion(jugador: JugadorHumano) -> None:
+    with pytest.raises(RuntimeError, match="todavía no ha seleccionado"):
+        jugador.elegir_jugada()
 
-    resultado = jugador._seleccionar_tipo()
 
-    assert resultado is TipoJugada.PAPEL
-    assert llamadas == 1
+def test_conserva_el_tipo_seleccionado(jugador: JugadorHumano) -> None:
+    jugador.seleccionar_tipo(TipoJugada.PAPEL)
+
+    assert jugador._seleccionar_tipo() is TipoJugada.PAPEL
+
+
+def test_rechaza_un_tipo_no_valido(jugador: JugadorHumano) -> None:
+    with pytest.raises(TypeError, match="TipoJugada"):
+        jugador.seleccionar_tipo("Piedra")  # type: ignore[arg-type]
+
+
+def test_una_nueva_seleccion_sustituye_a_la_anterior(
+    jugador: JugadorHumano,
+) -> None:
+    jugador.seleccionar_tipo(TipoJugada.PIEDRA)
+    jugador.seleccionar_tipo(TipoJugada.TIJERAS)
+
+    assert jugador._seleccionar_tipo() is TipoJugada.TIJERAS
 
 
 @pytest.mark.parametrize(
@@ -51,8 +62,8 @@ def test_elegir_jugada_devuelve_jugada_concreta_correspondiente(
     tipo: TipoJugada,
     clase_esperada: type[Jugada],
 ) -> None:
-    selector: Callable[[], TipoJugada] = lambda: tipo
-    jugador = JugadorHumano("Ana", selector)
+    jugador = JugadorHumano("Ana")
+    jugador.seleccionar_tipo(tipo)
 
     resultado = jugador.elegir_jugada()
 

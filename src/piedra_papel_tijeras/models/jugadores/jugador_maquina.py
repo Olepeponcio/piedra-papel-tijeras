@@ -19,3 +19,5 @@ class JugadorMaquina(Jugador):
     def _seleccionar_tipo(self) -> TipoJugada:
         """Devuelve un tipo de jugada seleccionado aleatoriamente."""
         return self._generador.choice(self._jugadas)
+
+    # hereda metodo elegir_jugada que usa _seleccionar_tipo
