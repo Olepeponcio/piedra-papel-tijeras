@@ -823,35 +823,35 @@ los metadatos alteran el hash. Cada archivo diferente necesita su propio hash.
 
 - [x] Commit identificado.
 - [x] Entorno limpio.
-- [ ] Pruebas, Ruff y Mypy superados.
-- [ ] Configuración `.spec` oficial.
-- [ ] Registro de construcción conservado.
+- [x] Pruebas, Ruff y Mypy superados.
+- [x] Configuración `.spec` oficial.
+- [x] Registro de construcción conservado.
 
 ## Contenido
 
-- [ ] Recursos autorizados.
-- [ ] Sin secretos ni hooks inesperados.
-- [ ] Sin ejecutables secundarios.
-- [ ] DLL y módulos justificados.
+- [x] Recursos autorizados.
+- [x] Sin secretos ni hooks inesperados.
+- [x] Sin ejecutables secundarios.
+- [x] DLL y módulos justificados.
 
 ## Trazabilidad
 
-- [ ] SBOM generado y validado.
-- [ ] Versión y commit asociados.
+- [-] SBOM generado y validado.
+- [x] Versión y commit asociados.
 
 ## Seguridad del binario
 
-- [ ] Microsoft Defender sin detecciones confirmadas.
-- [ ] Segundo análisis realizado.
-- [ ] Prueba en entorno limpio.
-- [ ] Sin red, persistencia ni privilegios inesperados.
+- [x] Microsoft Defender sin detecciones confirmadas.
+- [x] Segundo análisis realizado.
+- [x] Prueba en entorno limpio.
+- [x] Sin red, persistencia ni privilegios inesperados.
 
 ## Publicación
 
-- [ ] Firma Authenticode válida.
-- [ ] Sello de tiempo válido.
-- [ ] SHA-256 definitivo calculado y publicado.
-- [ ] Ejecutable final verificado.
+- [-] Firma Authenticode válida.
+- [-] Sello de tiempo válido.
+- [x] SHA-256 definitivo calculado y publicado.
+- [x] Ejecutable final verificado.
 
 # Criterio general de detención
 
